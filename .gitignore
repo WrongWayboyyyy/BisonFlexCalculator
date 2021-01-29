@@ -1,0 +1,3 @@
+cnt.l
+*.out
+lex.yy.c
