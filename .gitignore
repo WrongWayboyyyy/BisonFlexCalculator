@@ -1,3 +1,6 @@
 cnt.l
 *.out
 lex.yy.c
+calc.tab.c 
+calc.tab.h
+tex/
