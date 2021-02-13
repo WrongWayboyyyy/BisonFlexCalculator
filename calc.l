@@ -13,3 +13,4 @@
 [ \t]  { }
 .      { printf("Mystery character %s\n", yytext); }
 
+%%

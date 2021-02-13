@@ -9,29 +9,31 @@
 %%
 
 calclist: 
-    | calclist exp EOL { printf("= %d\n", $1); }
+    | calclist exp EOL { printf("= %d\n", $2); }
 ;
 
-exp: factor
+exp: factor {$$ = $1; }
     | exp ADD factor {$$ = $1 + $3; }
     | exp SUB factor {$$ = $1 - $3; }
 ;
 
-factor: term    
+factor: term {$$ = $1; } 
     | factor MUL term {$$ = $1 * $3; }
     | factor DIV term {$$ = $1 / $3; }
 ;
 
-term: NUMBER  
+term: NUMBER  {$$ = $1; }
     | ABS term { $$ = $2 >= 0? $2 : - $2; }
 ;
 
 %%
 
-main(int argc, char** argv) {
+int main(int argc, char** argv) {
     yyparse();
+    return 0;
 }
 
-yyerror(char* s) {
+int yyerror(char* s) {
     fprintf(stderr, "error: %s\n", s);
+    return 0;
 }
