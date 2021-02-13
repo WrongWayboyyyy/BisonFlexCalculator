@@ -19,12 +19,11 @@ struct Node* newast(int nodetype, struct Node* l, struct Node* r) {
 }
 
 struct Node* newnum(double d) {
-    struct Value *a = malloc(sizeof(struct Value));
+    struct Value* a = malloc(sizeof(struct Value));
     if(!a) {
         yyerror("out of space");
         exit(0); 
     }
-
     a->nodetype = 'K';
     a->number = d;
     return (struct Node*) a;
@@ -32,7 +31,6 @@ struct Node* newnum(double d) {
 
 double eval(struct Node* a) {
     double v;
-
     if (a->nodetype == 'K') {
         v = ((struct Value*)a)->number;
     } 
@@ -88,7 +86,7 @@ void treefree(struct Node* a) {
 
 int main(int argc, char** argv) {
     printf("> ");
-    yyparse();
+    return yyparse();
 }
 
 void yyerror(char* s, ...) {
