@@ -1,17 +1,23 @@
+%option noyywrap nodefault yylineno
 %{
 #include "calc.tab.h"
+#include "structure.h"
 %}
 
+EXP ([Ee][-+]?[0-9]+)
+
 %%
-"+"    { return ADD; }
-"-"    { return SUB; }
-"*"    { return MUL; }
-"/"    { return DIV; }
-"|"    { return ABS; }
-"("    { return OP; }
-")"    { return CP; }
-[0-9]+ { yylval= atoi(yytext); return NUMBER; }
+"+" | 
+"-" |
+"*" |
+"/" |
+"|" |
+"(" |
+")"  {return yytext[0]; }
+[0-9]+"."[0-9]*{EXP}? |
+"."?[0-9]+{EXP}? { yylval.d = atof(yytext); return NUMBER; }
 \n     { return EOL; }
+"//".*
 [ \t]  { }
 .      { printf("Mystery character %s\n", yytext); }
 

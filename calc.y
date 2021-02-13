@@ -1,41 +1,46 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
+#include "structure.h"
 %}
 
-%token NUMBER
-%token ADD SUB MUL DIV ABS
+%union {
+    struct Node* a;
+    double d;
+}
+
+%token <d> NUMBER
 %token EOL
-%token OP CP
+
+%type <a> exp factor term
 
 %%
 
 calclist: 
-    | calclist exp EOL { printf("= %d\n", $2); }
+    | calclist exp EOL { printf("= %f\n", eval($2)); 
+    treefree($2);
+    printf("> ");
+    }
+    | calclist EOL { printf("> "); }
+
+
 ;
 
-exp: factor {$$ = $1; }
-    | exp ADD factor {$$ = $1 + $3; }
-    | exp SUB factor {$$ = $1 - $3; }
+exp: factor
+    | exp '+' factor { $$ = newast('+', $1, $3); }
+    | exp '-' factor { $$ = newast('-', $1, $3); }
 ;
 
-factor: term {$$ = $1; } 
-    | factor MUL term {$$ = $1 * $3; }
-    | factor DIV term {$$ = $1 / $3; }
+factor: term 
+    | factor '*' term { $$ = newast('*', $1, $3); }
+    | factor '/' term { $$ = newast('/', $1, $3); }
 ;
 
-term: NUMBER  {$$ = $1; }
-    | ABS term { $$ = $2 >= 0? $2 : - $2; }
-    | OP exp CP { $$ = $2; }
+term: NUMBER  {$$ = newnum($1); }
+    | '|' term { $$ = newast('|', $2, NULL); }
+    | '(' exp ')' { $$ = $2; }
+    | '-' term { $$ = newast('M', $2, NULL); }
+
 ;
 
 %%
-
-int main(int argc, char** argv) {
-    yyparse();
-    return 0;
-}
-
-int yyerror(char* s) {
-    fprintf(stderr, "error: %s\n", s);
-    return 0;
-}
