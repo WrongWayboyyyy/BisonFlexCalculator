@@ -37,7 +37,7 @@ factor: term
 ;
 
 term: NUMBER  {$$ = newnum($1); }
-    | '|' term { $$ = newast('|', $2, NULL); }
+    | '|' term '|' { $$ = newast('|', $2, NULL); }
     | '(' exp ')' { $$ = $2; }
     | '-' term { $$ = newast('M', $2, NULL); }
 

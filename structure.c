@@ -52,7 +52,7 @@ double eval(struct Node* a) {
     }
     else
     if (a->nodetype == '|') {
-        v = eval(a->l);
+        v = abs(eval(a->l));
     }
     else
     if (a->nodetype == 'M') {
