@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "structure.h"
+int yylex();
+int yyparse();
 %}
 
 %union {
@@ -39,3 +41,13 @@ exp: exp '+' exp {$$ = newast('+', $1, $3); }
 ;   
 
 %%
+
+int main(int argc, char** argv) {
+    printf("> ");
+    return yyparse();
+}
+
+void yyerror(char* s) {
+    fprintf(stderr, "%d: error: ", yylineno);
+    fprintf(stderr, "\n");
+}

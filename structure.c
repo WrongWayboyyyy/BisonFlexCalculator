@@ -83,17 +83,3 @@ void treefree(struct Node* a) {
         printf("internal error: free bad node %c\n", a->nodetype);
     } 
 }
-
-int main(int argc, char** argv) {
-    printf("> ");
-    return yyparse();
-}
-
-void yyerror(char* s, ...) {
-    va_list ap;
-    va_start(ap, s);
-
-    fprintf(stderr, "%d: error: ", yylineno);
-    vfprintf(stderr, s, ap);
-    fprintf(stderr, "\n");
-}
