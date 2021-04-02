@@ -1,6 +1,6 @@
 extern int yylineno;
 
-void yyerror(char* s, ...);
+void yyerror(char* s);
 
 struct Node {
     int nodetype;
