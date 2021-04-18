@@ -20,7 +20,7 @@ void arena_free (arena* arena) {
     arena->arena = NULL;
 }
 
-int arena_allocate(arena* arena, unsigned int count) {
+int arena_allocate (arena* arena, unsigned int count) {
     if (arena->allocated + count >= arena->size) {
         unsigned int newSize = MULTIPLY_FACTOR * arena->size;
         char* newArena = realloc(arena->arena, newSize * sizeof(arena->arena[0]));

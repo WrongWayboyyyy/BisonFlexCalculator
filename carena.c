@@ -1,5 +1,5 @@
 #include "carena.h"
 
-int allocate_node(arena* arena) {
-    return arena_allocate(arena, sizeof(node));
+int allocate_nodes(arena* arena, unsigned int cnt) {
+    return arena_allocate(arena, cnt * sizeof(node));
 }

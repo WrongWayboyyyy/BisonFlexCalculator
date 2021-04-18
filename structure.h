@@ -3,7 +3,7 @@
 
 extern int yylineno;
 
-void yyerror(char* s);
+void yyerror (char* s);
 
 typedef struct node {
     int nodetype;
@@ -16,11 +16,11 @@ typedef struct value {
     double number;
 } value;
 
-struct node* newast(int nodetype, struct node* l, struct node* r);
-struct node* newnum(double d);
+struct node* newast (int nodetype, struct node* l, struct node* r);
+struct node* newnum (double d);
 
-double eval(struct node*);
+double eval (struct node*);
 
-void treefree(struct node*);
+void treefree (struct node*);
 
 #endif
