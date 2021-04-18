@@ -1,21 +1,26 @@
+#ifndef _STRUCT_H_
+#define _STRUCT_H_
+
 extern int yylineno;
 
 void yyerror(char* s);
 
-struct Node {
+typedef struct node {
     int nodetype;
-    struct Node* l;
-    struct Node* r;
-};
+    struct node* l;
+    struct node* r;
+} node;
 
-struct Value {
+typedef struct value {
     int nodetype;
     double number;
-};
+} value;
 
-struct Node* newast(int nodetype, struct Node* l, struct Node* r);
-struct Node* newnum(double d);
+struct node* newast(int nodetype, struct node* l, struct node* r);
+struct node* newnum(double d);
 
-double eval(struct Node*);
+double eval(struct node*);
 
-void treefree(struct Node*);
+void treefree(struct node*);
+
+#endif
