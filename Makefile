@@ -1,4 +1,4 @@
-calc.out: calc.l calc.y structure.h
+calc.out: calc.l calc.y ast.h
 	bison -d calc.y
 	flex calc.l
-	cc -o $@ calc.tab.c lex.yy.c structure.c
+	cc -o $@ calc.tab.c lex.yy.c ast.c

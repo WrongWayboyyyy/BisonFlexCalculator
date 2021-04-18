@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "structure.h"
+#include "ast.h"
 
 struct node* newast(int nodetype, struct node* l, struct node* r) {
     struct node* a = malloc(sizeof(struct node));

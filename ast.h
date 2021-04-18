@@ -1,5 +1,5 @@
-#ifndef _STRUCT_H_
-#define _STRUCT_H_
+#ifndef _AST_H_
+#define _AST_H_
 
 extern int yylineno;
 
@@ -23,4 +23,4 @@ double eval (struct node*);
 
 void treefree (struct node*);
 
-#endif
+#endif /* _AST_H_ */

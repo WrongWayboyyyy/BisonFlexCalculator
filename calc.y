@@ -1,13 +1,13 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "structure.h"
+#include "ast.h"
 int yylex();
 int yyparse();
 %}
 
 %union {
-    struct Node* a;
+    struct node* a;
     double d;
 }
 

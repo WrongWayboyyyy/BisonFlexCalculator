@@ -2,7 +2,6 @@
 #define _ARENA_H_
 
 #include <stdlib.h>
-#include "structure.h"
 
 #define DEFAULT_ARR_SIZE 4
 #define MULTIPLY_FACTOR 2

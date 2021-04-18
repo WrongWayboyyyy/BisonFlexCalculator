@@ -1,4 +1,5 @@
 #include "arena.h"
+#include "arena_ast.h"
 #include <stdio.h>
 
 int main() {
