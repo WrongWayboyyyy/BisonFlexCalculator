@@ -1,5 +1,6 @@
 #ifndef _ARENA_AST_H_
 #define _ARENA_AST_H_
+#include "carena.h"
 
 extern int yylineno;
 
