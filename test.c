@@ -3,11 +3,11 @@
 
 int main() {
     struct arena a;
-    printf("%d", 12);
     arena_construct(&a);
     int* num;
-    for (int i = 0; i < 1; ++i) {
-        num = a.arena[arena_allocate(&a, sizeof(int))];
+    for (int i = 0; i < 1000 * 1000; ++i) {
+        num = (int*) &a.arena[arena_allocate(&a, sizeof(int))];
     }
+    *num = 3;
     printf("%d", *num);
 }

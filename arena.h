@@ -8,13 +8,13 @@
 #define MULTIPLY_FACTOR 2
 
 typedef struct arena {
-    node* arena;
+    char* arena;
     unsigned int size;
     unsigned int allocated;
 } arena;
 
-extern int arena_construct(arena* arena);
-extern void arena_free(arena* arena);
-extern int arena_allocate(arena* arena, unsigned int count);
+extern int arena_construct(arena* arena); // 0 - ok, !0 - failure
+extern void arena_free(arena* arena); 
+extern int arena_allocate(arena* arena, unsigned int count); // -1 - failure, index in arena otherwise
 
 #endif /* _ARENA_H_ */
