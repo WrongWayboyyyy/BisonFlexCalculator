@@ -1,7 +1,7 @@
 %option noyywrap nodefault yylineno
 %{
 #include "calc.tab.h"
-#include "ast.h"
+#include "arena_ast.h"
 %}
 
 EXP ([Ee][-+]?[0-9]+)

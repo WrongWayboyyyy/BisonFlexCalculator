@@ -1,9 +1,8 @@
 #ifndef _AST_H_
 #define _AST_H_
+#include "arena.h"
 
 extern int yylineno;
-
-void yyerror (char* s);
 
 typedef struct node {
     int nodetype;
@@ -16,11 +15,15 @@ typedef struct value {
     double number;
 } value;
 
-struct node* newast (int nodetype, unsigned int l, unsigned int r);
-struct node* newnum (double d);
+unsigned int newast (struct arena* arena, int nodetype, 
+    unsigned int l, unsigned int r);
+unsigned int newnum (struct arena*, double d);
 
-double eval (struct node*);
+double eval (struct arena* arena, struct node* node);
 
 void treefree (struct node*);
+
+
+void yyerror(struct arena* arg, char* s);
 
 #endif /* _AST_H_ */

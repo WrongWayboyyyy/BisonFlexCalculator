@@ -2,12 +2,13 @@
 #define _ARENA_H_
 
 #include <stdlib.h>
+#include "arena_ast.h"
 
 #define DEFAULT_ARR_SIZE 4
 #define MULTIPLY_FACTOR 2
 
 typedef struct arena {
-    char* arena;
+    struct node* arena;
     unsigned int size;
     unsigned int allocated;
 } arena;
