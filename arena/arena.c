@@ -23,7 +23,7 @@ void arena_free (arena* arena) {
 int arena_allocate (arena* arena, unsigned int count) {
     if (arena->allocated + count >= arena->size) {
         unsigned int newSize = MULTIPLY_FACTOR * arena->size;
-        node* newArena = realloc(arena->arena, newSize * sizeof(arena->arena[0]));
+        node* newArena = realloc(arena->arena, newSize * sizeof(node));
         if (NULL == newArena) {
             return -1;
         }

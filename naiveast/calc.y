@@ -37,7 +37,7 @@ exp: exp '+' exp {$$ = newast('+', $1, $3); }
     | '|' exp {$$ = newast('|', $2, NULL); }
     | '(' exp ')' {$$ = $2; }
     | '-' exp %prec UMINUS { $$ = newast('M', $2, NULL); }
-    | NUMBER {$$ = newnum($1); }
+    | NUMBER {printf("%c", $1);$$ = newnum($1); }
 ;   
 
 %%

@@ -4,10 +4,8 @@
 #include "arena_ast.h"
 #include "carena.h"
 
-void yyerror(arena* arg, char* s);
-
 unsigned int newast(arena* arena, int nodetype, unsigned int l, unsigned int r) {
-    unsigned int n = arena_allocate(arena, 1);   
+    unsigned int n = arena_allocate(arena, 2);   
     if (n < 0) {
         yyerror(arena, "not enough memory");
         exit(0);
@@ -20,12 +18,12 @@ unsigned int newast(arena* arena, int nodetype, unsigned int l, unsigned int r) 
 }
 
 unsigned int newnum(arena* arena, double d) {
-    unsigned int a = arena_allocate(arena, 1);
-    if(!a) {
+    unsigned int a = arena_allocate(arena, 2);
+    if(a < 0) {
         yyerror(arena, "not enough memory");
         exit(0); 
     }
-    value* val = (arena->arena + a);
+    value* val = (value*)(arena->arena + a);
     val->nodetype = 'K';
     val->number = d;
     return a;
@@ -34,27 +32,26 @@ unsigned int newnum(arena* arena, double d) {
 double eval(arena* arena, struct node* a) {
     double v;
     if (a->nodetype == 'K') {
-        v = ((struct value*)a)->number;
+        struct value* val = (value*) a;
+        v = val->number;
+        //printf("I'm number %f! \n", v);
     } 
     else
     if (a->nodetype == '+') {
-        v = eval(arena, &arena->arena[a->l]) + 
-            eval(arena, &arena->arena[a->r]);
+        //printf("I'm plus with %d %d! \n", a->l, a->r);
+        v = eval(arena, &(arena->arena[a->l])) + eval(arena, &(arena->arena[a->r]));
     }
     else
     if (a->nodetype == '-') {
-        v = eval(arena, &arena->arena[a->l]) - 
-            eval(arena, &arena->arena[a->r]);
+        v = eval(arena, &arena->arena[a->l]) - eval(arena, &arena->arena[a->r]);
     }
     else
     if (a->nodetype == '*') {
-        v = eval(arena, &arena->arena[a->l]) * 
-            eval(arena, &arena->arena[a->r]);
+        v = eval(arena, &arena->arena[a->l]) * eval(arena, &arena->arena[a->r]);
     }
     else
     if (a->nodetype == '/') {
-        v = eval(arena, &arena->arena[a->l]) / 
-            eval(arena, &arena->arena[a->r]);
+        v = eval(arena, &arena->arena[a->l]) / eval(arena, &arena->arena[a->r]);
     }
     else
     if (a->nodetype == '|') {
@@ -67,7 +64,7 @@ double eval(arena* arena, struct node* a) {
     else {
         printf("internal error: bad node %c\n", a->nodetype);
     }
-    return 0;
+    return v;
 }
 
 void treefree(struct node* a) {

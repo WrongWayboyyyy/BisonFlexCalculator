@@ -32,8 +32,7 @@ int yyparse(arena*);
 
 calclist: 
     | calclist exp EOL { printf("= %f\n", eval(arg, &(arg->arena[$2]))); 
-    arena_free(arg);
-    printf("> ");
+    //arena_free(arg);
     }
     | calclist EOL { printf("> "); }
 ;
@@ -50,6 +49,7 @@ exp: exp '+' exp {$$ = newast(arg, '+', $1, $3); }
 
 %%
 
+
 /* void yyerror(char* s) {
     fprintf(stderr, "%d: error: ", yylineno);
     fprintf(stderr, "\n");
@@ -60,5 +60,5 @@ int main(int argc, char** argv) {
     arena* arena = malloc(sizeof(arena));
     arena_construct(arena);
     printf("> ");
-   return yyparse(arena);
+    return yyparse(arena);
 }
