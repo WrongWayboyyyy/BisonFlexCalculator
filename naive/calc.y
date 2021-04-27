@@ -1,13 +1,13 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "structure.h"
 int yylex();
 int yyparse();
+void yyerror();
+int yylineno;
 %}
 
 %union {
-    struct Node* a;
     double d;
 }
 
@@ -18,26 +18,25 @@ int yyparse();
 %left '*' '/'
 %nonassoc '|' UMINUS
 
-%type <a> exp
+%type <d> exp
 
 %%
 
 calclist: 
-    | calclist exp EOL { printf("= %f\n", eval($2)); 
-    treefree($2);
+    | calclist exp EOL { printf("= %f\n", $2); 
     printf("> ");
     }
     | calclist EOL { printf("> "); }
 ;
 
-exp: exp '+' exp {$$ = newast('+', $1, $3); }
-    | exp '-' exp {$$ = newast('-', $1, $3); }
-    | exp '*' exp {$$ = newast('*', $1, $3); }
-    | exp '/' exp {$$ = newast('/', $1, $3); }
-    | '|' exp {$$ = newast('|', $2, NULL); }
+exp:  exp '+' exp {$$ = $1 + $3; }
+    | exp '-' exp {$$ = $1 + $3; }
+    | exp '*' exp {$$ = $1 * $3; }
+    | exp '/' exp {$$ = $1 / $3; }
+    | '|' exp {$$ = $2 >= 0? $2 : - $2; }
     | '(' exp ')' {$$ = $2; }
-    | '-' exp %prec UMINUS { $$ = newast('M', $2, NULL); }
-    | NUMBER {$$ = newnum($1); }
+    | '-' exp %prec UMINUS { $$ = -$2; }
+    | NUMBER {$$ = $1; }
 ;   
 
 %%

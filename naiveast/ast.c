@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "structure.h"
+#include "ast.h"
 
-struct Node* newast(int nodetype, struct Node* l, struct Node* r) {
-    struct Node* a = malloc(sizeof(struct Node));
+struct node* newast(int nodetype, struct node* l, struct node* r) {
+struct node* a = malloc(sizeof(struct node));
 
     if (!a) {
         yyerror("Not enough memory");
@@ -18,21 +18,21 @@ struct Node* newast(int nodetype, struct Node* l, struct Node* r) {
     return a;
 }
 
-struct Node* newnum(double d) {
-    struct Value* a = malloc(sizeof(struct Value));
+struct node* newnum(double d) {
+    struct value* a = malloc(sizeof(struct value));
     if(!a) {
         yyerror("out of space");
         exit(0); 
     }
     a->nodetype = 'K';
     a->number = d;
-    return (struct Node*) a;
+    return (struct node*) a;
 }
 
-double eval(struct Node* a) {
+double eval(struct node* a) {
     double v;
     if (a->nodetype == 'K') {
-        v = ((struct Value*)a)->number;
+        v = ((struct value*)a)->number;
     } 
     else
     if (a->nodetype == '+') {
@@ -64,7 +64,7 @@ double eval(struct Node* a) {
     return v;
 }
 
-void treefree(struct Node* a) {
+void treefree(struct node* a) {
     if (a->nodetype == '+' || a->nodetype == '-' || a->nodetype == '*' || a->nodetype == '/') {
         treefree(a->r);
         treefree(a->l);
