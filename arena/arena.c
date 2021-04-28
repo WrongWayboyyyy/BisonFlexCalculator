@@ -1,8 +1,5 @@
 #include "arena.h"
 
-#define DEFAULT_ARENA_SIZE 16
-#define MULTIPLY_FACTOR 2
-
 int arena_construct (arena* arena) {
     arena->size = DEFAULT_ARENA_SIZE;
     arena->allocated = 0;
@@ -18,6 +15,10 @@ void arena_free (arena* arena) {
     if (arena->arena != NULL)
         free(arena->arena);
     arena->arena = NULL;
+}
+
+void arena_clear (arena* arena) {
+    arena->allocated = 0;
 }
 
 int arena_allocate (arena* arena, unsigned int count) {
