@@ -3,13 +3,12 @@
 #include <stdlib.h>
 #include <setjmp.h>
 #include "arena_ast.h"
-#include "carena.h"
 int yylex();
 int yyparse(arena*);
 %}
 
 %union {
-    int a;
+    unsigned int a;
     double d;
 }
 
@@ -31,8 +30,8 @@ int yyparse(arena*);
 %%
 
 calclist: 
-    | calclist exp EOL { printf("= %f\n", eval(arg, &(arg->arena[$2]))); 
-    //arena_free(arg);
+    | calclist exp EOL { printf("= %f (allocated: %d)\n", eval(arg, &(arg->arena[$2])), arg->allocated); 
+    arena_clear(arg);
     }
     | calclist EOL { printf("> "); }
 ;
@@ -49,16 +48,11 @@ exp: exp '+' exp {$$ = newast(arg, '+', $1, $3); }
 
 %%
 
-
-/* void yyerror(char* s) {
-    fprintf(stderr, "%d: error: ", yylineno);
-    fprintf(stderr, "\n");
-} */
-
-
 int main(int argc, char** argv) {
     arena* arena = malloc(sizeof(arena));
     arena_construct(arena);
     printf("> ");
-    return yyparse(arena);
+    yyparse(arena);
+    arena_free(arena);
+    return 0;
 }

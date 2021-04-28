@@ -24,6 +24,6 @@ double eval (struct arena* arena, struct node* node);
 void treefree (struct node*);
 
 
-void yyerror(struct arena* arg, char* s);
+void yyerror (struct arena* arg, char* s);
 
 #endif /* _AST_H_ */
