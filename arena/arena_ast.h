@@ -14,7 +14,7 @@ unsigned int newnum (arena*, double d);
 
 double eval (arena* arena, node* node);
 
-void treefree (struct node*);
+void treefree (node*);
 
 void yyerror (arena* arg, node** root, char* s);
 

@@ -4,7 +4,7 @@
 #include "ast.h"
 
 struct node* newast(int nodetype, struct node* l, struct node* r) {
-struct node* a = malloc(sizeof(struct node));
+    struct node* a = malloc(sizeof(struct node));
 
     if (!a) {
         yyerror(NULL, "Not enough memory");

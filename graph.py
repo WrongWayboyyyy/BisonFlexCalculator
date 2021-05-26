@@ -22,10 +22,12 @@ for index in range(1, len(sys.argv)):
             break
         x_axis.append(w)
         y_axis.append(h)
-    plt.xlabel("Length")
-    plt.ylabel("Time")
+    plt.xlabel("Длина выражения")
+    plt.ylabel("Время")
     plt.plot(x_axis, y_axis)
-    
+plt.xlim(1, 100.5)
+plt.ylim(5e-8, 2e-5)
+plt.title("Сравнение производительности полученных анализаторов")
 plt.yscale("log")
 plt.grid(True) 
 plt.legend(legend, loc="lower right")

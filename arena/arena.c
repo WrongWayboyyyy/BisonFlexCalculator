@@ -3,7 +3,7 @@
 int arena_construct (arena* arena) {
     arena->size = DEFAULT_ARENA_SIZE;
     arena->allocated = 0;
-    arena->arena = malloc(sizeof(node) * arena->size);
+    arena->arena = malloc(sizeof(node) * DEFAULT_ARENA_SIZE);
     if (arena->arena == NULL) {
         return (!0);
     }
@@ -11,7 +11,6 @@ int arena_construct (arena* arena) {
 }
 
 void arena_free (arena* arena) {
-    struct arena* newArena;
     if (arena->arena != NULL)
         free(arena->arena);
     arena->arena = NULL;
@@ -24,7 +23,8 @@ void arena_clear (arena* arena) {
 int arena_allocate (arena* arena, unsigned int count) {
     if (arena->allocated + count >= arena->size) {
         unsigned int newSize = MULTIPLY_FACTOR * arena->size;
-        node* newArena = realloc(arena->arena, newSize * sizeof(node));
+        node* newArena = realloc(arena->arena, 
+            newSize  * sizeof(node));
         if (NULL == newArena) {
             return -1;
         }

@@ -62,9 +62,10 @@ int main(int argc, char** argv) {
     yyparse(&result);
     
     for (int i = 0; i < repeats; ++i) {
-        printf("%f\n" , eval(result) );  
+        printf("%f\n" , eval(result));  
     }
     treefree(result);
+    return 0;
 }
 
 void yyerror(struct node** root, char* s) {

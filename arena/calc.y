@@ -33,7 +33,7 @@ extern void yy_scan_string(const char* str);
 %%
 
 calclist: 
-    | calclist exp EOL { *root = &(arena->arena[$2]); }
+    | calclist exp EOL { *root = arena->arena + $2; }
     | calclist EOL { }
 ;
 

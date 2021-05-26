@@ -4,24 +4,23 @@
 #include "arena_ast.h"
 #include <math.h>
 
-
-
 unsigned int newast (arena* arena, int nodetype, unsigned int l, unsigned int r) {
-    unsigned int n = arena_allocate(arena, 2);   
+    unsigned int n = arena_allocate(arena, 1);   
     if (n < 0) {
         yyerror(arena, NULL, "Not enough memory");
         exit(0);
     }
-    arena->arena[n].l = l;
-    arena->arena[n].r = r;
-    arena->arena[n].nodetype = nodetype;
+    node* block = arena->arena + n;
+    block->l = l;
+    block->r = r;
+    block->nodetype = nodetype;
     
     return n;
 }
 
 unsigned int newnum (arena* arena, double d) {
     unsigned int a = arena_allocate(arena, 2);
-    if(a < 0) {
+    if (a < 0) {
         yyerror(arena, NULL, "Not enough memory");
         exit(0); 
     }
@@ -33,33 +32,35 @@ unsigned int newnum (arena* arena, double d) {
 
 double eval (arena* arena, struct node* a) {
     double v;
-    if (a->nodetype == 'K') {
-        struct value* val = (value*) a;
+    unsigned int type = a->nodetype;
+    node* block = arena->arena;
+    if (type == 'K') {
+        value* val = (value*) a;
         v = val->number;
     } 
     else
-    if (a->nodetype == '+') {
-        v = eval(arena, &(arena->arena[a->l])) + eval(arena, &(arena->arena[a->r]));
+    if (type == '+') {
+        v = eval(arena, block + a->l) + eval(arena, block + a->r);
     }
     else
-    if (a->nodetype == '-') {
-        v = eval(arena, &arena->arena[a->l]) - eval(arena, &arena->arena[a->r]);
+    if (type == '-') {
+        v = eval(arena, block + a->l) - eval(arena, block + a->r);
     }
     else
-    if (a->nodetype == '*') {
-        v = eval(arena, &arena->arena[a->l]) * eval(arena, &arena->arena[a->r]);
+    if (type == '*') {
+        v = eval(arena, block + a->l) * eval(arena, block + a->r);
     }
     else
-    if (a->nodetype == '/') {
-        v = eval(arena, &arena->arena[a->l]) / eval(arena, &arena->arena[a->r]);
+    if (type == '/') {
+        v = eval(arena, block + a->l) / eval(arena, block + a->r);
     }
     else
-    if (a->nodetype == '|') {
-        v = fabs(eval(arena, &arena->arena[a->l]));
+    if (type == '|') {
+        v = fabs(eval(arena, block + a->l));
     }
     else
-    if (a->nodetype == 'M') {
-        v = -eval(arena, &arena->arena[a->l]);
+    if (type == 'M') {
+        v = -eval(arena, block + a->l);
     }
     else {
         printf("internal error: bad node %c\n", a->nodetype);
