@@ -30,8 +30,11 @@ int yyparse(arena*);
 %%
 
 calclist: 
-    | calclist exp EOL { printf("= %f (allocated: %d)\n", eval(arg, &(arg->arena[$2])), arg->allocated); 
-    arena_clear(arg);
+    | calclist exp EOL {
+        for (int i = 0; i < 1000 * 1000; ++i) {
+            eval(arg, &(arg->arena[$2])); 
+        }
+        printf("> ");
     }
     | calclist EOL { printf("> "); }
 ;

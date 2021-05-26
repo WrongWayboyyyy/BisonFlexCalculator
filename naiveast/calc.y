@@ -23,8 +23,10 @@ int yyparse();
 %%
 
 calclist: 
-    | calclist exp EOL { printf("= %f\n", eval($2)); 
-    treefree($2);
+    | calclist exp EOL { 
+        for (int i = 0; i < 1000 * 1000; ++i) {
+            eval($2)); 
+        }  
     printf("> ");
     }
     | calclist EOL { printf("> "); }

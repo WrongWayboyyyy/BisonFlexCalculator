@@ -2,9 +2,12 @@
 %{
 #include "calc.tab.h"
 #include "ast.h"
+
 %}
 
 EXP ([Ee][-+]?[0-9]+)
+
+
 
 %%
 "+" | 

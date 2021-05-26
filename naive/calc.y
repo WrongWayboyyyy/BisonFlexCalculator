@@ -1,10 +1,10 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-int yylex();
-int yyparse();
-void yyerror();
-int yylineno;
+extern int yylex();
+extern void yyerror();
+extern int yylineno;
+extern void yy_scan_string(const char* str);
 %}
 
 %union {
@@ -41,9 +41,16 @@ exp:  exp '+' exp {$$ = $1 + $3; }
 
 %%
 
+
 int main(int argc, char** argv) {
+    const char* testString = argv[1];
+    for (int i = 0; i < 1000 * 1000; ++i) {
+        yy_scan_string(testString);
+        yyparse();
+    }
+
     printf("> ");
-    return yyparse();
+    
 }
 
 void yyerror(char* s) {
