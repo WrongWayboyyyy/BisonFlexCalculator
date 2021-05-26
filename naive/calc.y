@@ -60,7 +60,6 @@ int main(int argc, char** argv) {
         yy_scan_string(testString);
         yyparse();
     }
-    
     return 0;
 }
 

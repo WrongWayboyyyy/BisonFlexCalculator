@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "arena_ast.h"
+#include "node.h"
 
 #define DEFAULT_ARENA_SIZE 4
 #define MULTIPLY_FACTOR 2
