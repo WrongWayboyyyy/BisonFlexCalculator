@@ -34,36 +34,33 @@ double eval (arena* arena, struct node* a) {
     double v;
     unsigned int type = a->nodetype;
     node* block = arena->arena;
-    if (type == 'K') {
+    switch (type) {
+    case 'K': {
         value* val = (value*) a;
         v = val->number;
-    } 
-    else
-    if (type == '+') {
+        break;
+    }   
+    case '+':
         v = eval(arena, block + a->l) + eval(arena, block + a->r);
-    }
-    else
-    if (type == '-') {
+        break;
+    case '-':
         v = eval(arena, block + a->l) - eval(arena, block + a->r);
-    }
-    else
-    if (type == '*') {
+        break;
+    case '*':
         v = eval(arena, block + a->l) * eval(arena, block + a->r);
-    }
-    else
-    if (type == '/') {
+        break;
+    case '/':
         v = eval(arena, block + a->l) / eval(arena, block + a->r);
-    }
-    else
-    if (type == '|') {
+        break;
+    case '|':
         v = fabs(eval(arena, block + a->l));
-    }
-    else
-    if (type == 'M') {
+        break;
+    case 'M':
         v = -eval(arena, block + a->l);
-    }
-    else {
+        break;
+    default:
         printf("internal error: bad node %c\n", a->nodetype);
+        break;
     }
     return v;
 }
