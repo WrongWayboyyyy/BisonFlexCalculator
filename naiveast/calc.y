@@ -11,7 +11,7 @@ extern void yy_scan_string(const char* str);
 
 %union {
     struct node* a;
-    double d
+    double d;
 }
 
 %token <d> NUMBER
