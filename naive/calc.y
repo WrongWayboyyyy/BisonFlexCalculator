@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
     char* testString = terminateString(argv[1]);
     int repeats = atoi(argv[2]);
     for (int i = 0; i < repeats; ++i) {
+
         yy_scan_string(testString);
         yyparse();
     }

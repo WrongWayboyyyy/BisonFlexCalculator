@@ -22,15 +22,13 @@ for index in range(1, len(sys.argv)):
             break
         x_axis.append(w)
         y_axis.append(h)
-    plt.xlabel("Длина выражения")
-    plt.ylabel("Время")
+    plt.xlabel("Длина выражения", size = 22)
+    plt.ylabel("Время", size = 22)
     plt.plot(x_axis, y_axis)
-plt.xlim(1, 100.5)
+plt.xlim(0.5, 100.5)
 plt.ylim(5e-8, 2e-5)
-plt.title("Сравнение производительности полученных анализаторов")
+plt.rcParams.update({'font.size': 18})
 plt.yscale("log")
 plt.grid(True) 
 plt.legend(legend, loc="lower right")
 plt.show()
-
-
