@@ -4,10 +4,10 @@
 #include "ast.h"
 
 struct node* newast(int nodetype, struct node* l, struct node* r) {
-struct node* a = malloc(sizeof(struct node));
+    struct node* a = malloc(sizeof(struct node));
 
     if (!a) {
-        yyerror("Not enough memory");
+        yyerror(NULL, "Not enough memory");
         exit(0);
     }
 
@@ -21,7 +21,7 @@ struct node* a = malloc(sizeof(struct node));
 struct node* newnum(double d) {
     struct value* a = malloc(sizeof(struct value));
     if(!a) {
-        yyerror("out of space");
+        yyerror(NULL, "out of space");
         exit(0); 
     }
     a->nodetype = 'K';
@@ -52,7 +52,7 @@ double eval(struct node* a) {
     }
     else
     if (a->nodetype == '|') {
-        v = abs(eval(a->l));
+        v = fabs(eval(a->l));
     }
     else
     if (a->nodetype == 'M') {

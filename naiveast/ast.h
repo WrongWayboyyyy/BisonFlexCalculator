@@ -2,8 +2,7 @@
 #define _AST_H_
 
 extern int yylineno;
-
-void yyerror (char* s);
+extern double fabs(double);
 
 typedef struct node {
     int nodetype;
@@ -22,5 +21,8 @@ struct node* newnum (double d);
 double eval (struct node*);
 
 void treefree (struct node*);
+
+void yyerror (node** root, char* s);
+
 
 #endif /* _AST_H_ */
