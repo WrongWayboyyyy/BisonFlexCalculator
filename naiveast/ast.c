@@ -31,35 +31,33 @@ struct node* newnum(double d) {
 
 double eval(struct node* a) {
     double v;
-    if (a->nodetype == 'K') {
-        v = ((struct value*)a)->number;
-    } 
-    else
-    if (a->nodetype == '+') {
+    switch (a->nodetype) {
+    case 'K': {
+        value* val = (value*) a;
+        v = val->number;
+        break;
+    }   
+    case '+':
         v = eval(a->l) + eval(a->r);
-    }
-    else
-    if (a->nodetype == '-') {
+        break;
+    case '-':
         v = eval(a->l) - eval(a->r);
-    }
-    else
-    if (a->nodetype == '*') {
+        break;
+    case '*':
         v = eval(a->l) * eval(a->r);
-    }
-    else
-    if (a->nodetype == '/') {
+        break;
+    case '/':
         v = eval(a->l) / eval(a->r);
-    }
-    else
-    if (a->nodetype == '|') {
+        break;
+    case '|':
         v = fabs(eval(a->l));
-    }
-    else
-    if (a->nodetype == 'M') {
+        break;
+    case 'M':
         v = -eval(a->l);
-    }
-    else {
+        break;
+    default:
         printf("internal error: bad node %c\n", a->nodetype);
+        break;
     }
     return v;
 }
