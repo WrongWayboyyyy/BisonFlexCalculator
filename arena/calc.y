@@ -4,6 +4,7 @@
 #include <string.h>
 #include <setjmp.h>
 #include "arena_ast.h"
+#include <stdbool.h>
 
 int yylex();
 int yyparse(arena*, node**);
@@ -33,8 +34,8 @@ extern void yy_scan_string(const char* str);
 %%
 
 calclist: 
-    | calclist exp EOL { *root = arena->arena + $2; }
-    | calclist EOL { }
+    | calclist exp EOL { *root = arena->arena + $2; return 0; }
+    | calclist EOL { printf("> "); }
 ;
 
 exp: exp '+' exp {$$ = newast(arena, '+', $1, $3); }
@@ -57,26 +58,45 @@ char* terminateString(char* str) {
 }
 
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        fprintf(stderr, "Bad arguments");
-        return -1; 
+
+    const char* mode = argv[1];
+    if (!mode) {
+        printf("%s", "No mode selected");
+        return -1;
     }
+    const char* testString;
+    int repeats = 1;
 
-    arena* arena = malloc(sizeof(arena));
-    arena_construct(arena);
-
-    const char* testString = terminateString(argv[1]);
-    int repeats = atoi(argv[2]);
+    if (strcmp(mode, "benchmark") == 0) {
+        if (argc < 4) {
+            printf("%s", "Bad arguments");
+            return -1;
+        }
+        testString = terminateString(argv[2]);
+        repeats = atoi(argv[3]);
+        yy_scan_string(testString);
+    }
 
     node* result;
-    yy_scan_string(testString);
-    yyparse(arena, &result);
-    
-    for (int i = 0; i < repeats; ++i) {
-        printf("%f\n" , eval(arena, result));
+    bool inProgress = true;
+    while (inProgress) {
+        arena* arena = malloc(sizeof(arena));
+        arena_construct(arena);
+        if (strcmp(mode, "interactive") == 0)
+            printf("> ");
         
+        yyparse(arena, &result);
+        if (strcmp(mode, "benchmark") == 0) {
+            for (int i = 0; i < repeats; ++i) {
+                printf("%f\n" , eval(arena, result));
+            }   
+            inProgress = false;
+        }
+        else {
+            printf("= %f (allocated: %i)\n", eval(arena, result), arena->allocated);
+        }
+        arena_free(arena);
     }
-    arena_free(arena);
     return 0;
 }
 
