@@ -2,6 +2,7 @@ import subprocess as sb
 from time import time
 import matplotlib.pyplot as plt
 import sys
+import numpy as np
 
 legend = []
 for index in range(1, len(sys.argv)):
@@ -24,6 +25,10 @@ for index in range(1, len(sys.argv)):
         y_axis.append(h)
     plt.xlabel("Длина выражения", size = 22)
     plt.ylabel("Время", size = 22)
+    p = np.polyfit(x_axis, y_axis, 1)
+    for i in range(len(x_axis)):
+       y_axis[i] = p[0] * x_axis[i] + p[1]
+    
     plt.plot(x_axis, y_axis)
 plt.xlim(0.5, 100.5)
 plt.ylim(5e-8, 2e-5)
