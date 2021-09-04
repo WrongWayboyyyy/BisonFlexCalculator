@@ -7,7 +7,7 @@
 unsigned int newnode (arena* arena, int nodetype, unsigned int l, unsigned int r) {
     unsigned int n = arena_allocate(arena, 1);
     if (n < 0) {
-        yyerror(arena, NULL, "Not enough memory");
+        yyerror(arena, "Not enough memory");
         exit(0);
     }
     node* block = arena->arena + n;
@@ -21,7 +21,7 @@ unsigned int newnode (arena* arena, int nodetype, unsigned int l, unsigned int r
 unsigned int newnum (arena* arena, double d) {
     unsigned int a = arena_allocate(arena, 2);
     if (a < 0) {
-        yyerror(arena, NULL, "Not enough memory");
+        yyerror(arena, "Not enough memory");
         exit(0); 
     }
     value* val = (value*)(arena->arena + a);

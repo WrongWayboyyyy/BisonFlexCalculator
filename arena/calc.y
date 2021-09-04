@@ -3,17 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <setjmp.h>
-#include "arena_ast.h"
+#include <ast.h>
 #include <stdbool.h>
 
 int yylex();
-int yyparse(arena*, node**);
+int yyparse(arena*);
 extern void yy_scan_string(const char* str);
 
 %}
 
 %union {
-    unsigned int a;
+    int a;
     double d;
 }
 
@@ -23,28 +23,28 @@ extern void yy_scan_string(const char* str);
 %left '+' '-'
 %left '*' '/'
 %nonassoc '|' UMINUS
-%param { arena* arena } {node** root}
+%param { arena* arena }
 
 %type <a> exp
 
 %code requires {
-    #include "arena.h"
+    #include <arena.h>
 }
 
 %%
 
 calclist: 
-    | calclist exp EOL { *root = arena->arena + $2; return 0; }
+    | calclist exp EOL { return $2; }
     | calclist EOL { printf("> "); }
 ;
 
-exp: exp '+' exp {$$ = newast(arena, '+', $1, $3); }
-    | exp '-' exp {$$ = newast(arena, '-', $1, $3); }
-    | exp '*' exp {$$ = newast(arena, '*', $1, $3); }
-    | exp '/' exp {$$ = newast(arena, '/', $1, $3); }
-    | '|' exp {$$ = newast(arena, '|', $2, -1); } 
+exp: exp '+' exp {$$ = newnode(arena, '+', $1, $3); }
+    | exp '-' exp {$$ = newnode(arena, '-', $1, $3); }
+    | exp '*' exp {$$ = newnode(arena, '*', $1, $3); }
+    | exp '/' exp {$$ = newnode(arena, '/', $1, $3); }
+    | '|' exp {$$ = newnode(arena, '|', $2, -1); } 
     | '(' exp ')' {$$ = $2; }
-    | '-' exp %prec UMINUS {$$ = newast(arena, 'M', $2, -1); }
+    | '-' exp %prec UMINUS {$$ = newnode(arena, 'M', $2, -1); }
     | NUMBER {$$ = newnum(arena, $1); }
 ;   
 
@@ -88,8 +88,8 @@ int main(int argc, char** argv) {
         repeats = atoi(argv[3]);
         yy_scan_string(testString);
     }
-
     node* result;
+
     bool inProgress = true;
     while (inProgress) {
         arena* arena = malloc(sizeof(arena));
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
         if (strcmp(mode, "interactive") == 0)
             printf("> ");
         
-        yyparse(arena, &result);
+        result = arena->arena + yyparse(arena);
         if (strcmp(mode, "benchmark") == 0) {
             for (int i = 0; i < repeats; ++i) {
                 printf("%f\n" , eval(arena, result));
@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
 }
 
 
-void yyerror (arena* arg, node** root, char* s) {
+void yyerror (arena* arena, char* s) {
     fprintf(stderr, "%d: error: ", yylineno);
     fprintf(stderr, "\n");
 }

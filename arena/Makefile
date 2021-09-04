@@ -1,13 +1,14 @@
-clean:
-	rm calc.tab.c
-	rm calc.tab.h
-	rm lex.yy.c
-	rm calc.out
+subpath = arena
 
-build: calc.l calc.y arena_ast.h
+clean:
+	rm -f calc.tab.c
+	rm -f calc.tab.h
+	rm -f lex.yy.c
+
+build: calc.l calc.y ${subpath}/ast.h
 	bison -d calc.y
 	flex calc.l
-	cc -o calc.out calc.tab.c lex.yy.c arena_ast.c arena.c
+	cc -I${subpath} -o calc.out calc.tab.c lex.yy.c ${subpath}/ast.c ${subpath}/arena.c
 
 run: build
 	./calc.out ${mode} ${expr} ${repeats}

@@ -16,6 +16,6 @@ double eval (arena* arena, node* node);
 
 void treefree (node*);
 
-void yyerror (arena* arg, node** root, char* s);
+void yyerror (arena* arena, char* s);
 
 #endif /* _AST_H_ */

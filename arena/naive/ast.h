@@ -8,7 +8,7 @@ extern int yylineno;
 typedef struct arena arena;
 typedef struct node node;
 
-unsigned int newast (arena* arena, int nodetype, 
+unsigned int newnode (arena* arena, int nodetype, 
     unsigned int l, unsigned int r);
 unsigned int newnum (arena* arena, double d);
 
