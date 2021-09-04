@@ -60,8 +60,20 @@ char* terminateString(char* str) {
 int main(int argc, char** argv) {
 
     const char* mode = argv[1];
+    int code;
     if (!mode) {
         printf("%s", "No mode selected");
+        return -1;
+    }
+    if (strcmp(mode, "benchmark") == 0) {
+        code = 1;
+    }
+    else
+    if (strcmp(mode, "interactive") == 0) {
+        code = 2;
+    }
+    else {
+        printf("%s", "Unknown mode selected");
         return -1;
     }
     const char* testString;
