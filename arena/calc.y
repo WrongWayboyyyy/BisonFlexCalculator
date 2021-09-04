@@ -5,13 +5,14 @@
 #include <string.h>
 #include <setjmp.h>
 #include <ast.h>
+#include "arena/arena.h"
 #include <stdbool.h>
 
 int yylex();
-int yyparse();
+int yyparse(arena*);
 extern void yy_scan_string(const char* str);
 extern double fabs(double);
-void yyerror(const char *s);
+void yyerror(arena*, const char *s);
 
 
 %}
@@ -24,13 +25,14 @@ void yyerror(const char *s);
 %nonassoc '|' UMINUS
 %code requires {
     #include <ast.h>
+    #include "arena/arena.h"
 }
-
+%param {arena* arena}
 
 %%
 
 calclist: 
-    | calclist exp EOL { printf("%f", $2); }
+    | calclist exp EOL { CALC_RESULT($2) }
     | calclist EOL { printf("> "); }
 ;
 
@@ -76,7 +78,10 @@ int main(int argc, char** argv) {
     }
     const char* testString;
     int repeats = 1;
-    yyparse();
+    arena* arena = malloc(sizeof(arena));
+    arena_construct(arena);
+
+    yyparse(arena);
 
     // if (strcmp(mode, "benchmark") == 0) {
     //     if (argc < 4) {
@@ -111,7 +116,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void yyerror (const char* s) {
+void yyerror (arena*, const char* s) {
     fprintf(stderr, "%d: error: ", yylineno);
     fprintf(stderr, "\n");
 }
