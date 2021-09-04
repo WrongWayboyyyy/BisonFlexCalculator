@@ -30,7 +30,7 @@ unsigned int newnum (arena* arena, double d) {
     return a;
 }
 
-double eval (arena* arena, struct node* a) {
+double eval (arena* arena) {
     double v;
     unsigned int type = a->nodetype;
     node* block = arena->arena;

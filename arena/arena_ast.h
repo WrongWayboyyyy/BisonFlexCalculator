@@ -10,7 +10,7 @@ typedef struct node node;
 
 unsigned int newast (arena* arena, int nodetype, 
     unsigned int l, unsigned int r);
-unsigned int newnum (arena*, double d);
+unsigned int newnum (arena* arena, double d);
 
 double eval (arena* arena, node* node);
 
