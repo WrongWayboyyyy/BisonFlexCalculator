@@ -8,9 +8,9 @@ clean:
 build: calc.l calc.y ${subpath}/ast.h
 	bison -d calc.y
 	flex calc.l
-	cc -I${subpath} -o calc.out ${subpath}/ast.c calc.tab.c lex.yy.c ${subpath}/arena.c
+	cc -I${subpath} -o calc.out ${subpath}/ast.c calc.tab.c lex.yy.c
 
-run: build
+run: build clean
 	./calc.out ${mode} ${expr} ${repeats}
 
 	

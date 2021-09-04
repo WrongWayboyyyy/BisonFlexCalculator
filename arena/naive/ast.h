@@ -1,23 +1,16 @@
 #ifndef _AST_H_
 #define _AST_H_
-#include "node.h"
-#include "arena.h"
 
-#define YYSTYPE double;
+#define YYSTYPE double
 
 extern int yylineno;
 
-typedef struct arena arena;
-typedef struct node node;
-
-unsigned int newnode (arena* arena, int nodetype, 
-    unsigned int l, unsigned int r);
-unsigned int newnum (arena* arena, double d);
-
-double eval (arena* arena, node* node);
-
-void treefree (node*);
-
-void yyerror (arena* arg, node** root, char* s);
+#define CALC_ADD(TOP, L, R) TOP = L + R
+#define CALC_SUB(TOP, L, R) TOP = L - R
+#define CALC_MUL(TOP, L, R) TOP = L * R
+#define CALC_DIV(TOP, L, R) TOP = L / R
+#define CALC_ABS(TOP, ARG) TOP = fabs(ARG)
+#define CALC_NEG(TOP, ARG) TOP = -ARG
+#define CALC_NUM(TOP, ARG) TOP = ARG
 
 #endif /* _AST_H_ */

@@ -1,7 +1,7 @@
 %option noyywrap nodefault yylineno
 %{
 #include "calc.tab.h"
-#include "arena/ast.h"
+#include <ast.h>
 
 %}
 

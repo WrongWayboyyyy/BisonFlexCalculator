@@ -4,6 +4,7 @@
 #include "arena.h"
 
 #define YYSTYPE unsigned int
+#define CALC_MODE ARENA
 
 extern int yylineno;
 
