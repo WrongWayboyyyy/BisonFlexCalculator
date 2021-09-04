@@ -1,4 +1,5 @@
 %{
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,24 +13,17 @@ extern void yy_scan_string(const char* str);
 
 %}
 
-%union {
-    int a;
-    double d;
-}
-
-%token <d> NUMBER
+%token NUMBER
 %token EOL
 
 %left '+' '-'
 %left '*' '/'
 %nonassoc '|' UMINUS
 %param { arena* arena }
-
-%type <a> exp
-
 %code requires {
-    #include <arena.h>
+    #include <ast.h>
 }
+
 
 %%
 

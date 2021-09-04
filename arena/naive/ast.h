@@ -3,6 +3,8 @@
 #include "node.h"
 #include "arena.h"
 
+#define YYSTYPE double;
+
 extern int yylineno;
 
 typedef struct arena arena;
