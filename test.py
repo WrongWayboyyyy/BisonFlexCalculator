@@ -6,7 +6,7 @@ def run(args):
         capture_output=True, ).stdout.decode().strip()
 
 def main():
-    if (len(sys.argv) < 6):
+    if (len(sys.argv) < 7):
         print("Invalid arguments")
         return
     exe_path = sys.argv[1]
@@ -14,13 +14,14 @@ def main():
     right_bound = int(sys.argv[3])
     step = int(sys.argv[4])
     iter = sys.argv[5]
+    ver = sys.argv[6]
 
     f = open(out_path, "w")
-    f.write(f"{exe_path}\n")
+    f.write(f"{ver}\n")
     f.close()
     for expr_len in range(1, right_bound, step):
         test_string = "+".join(['2'] * expr_len)
-        args = [exe_path, test_string, iter]
+        args = [exe_path, "benchmark", ver, test_string, iter]
         t = time.monotonic()
         run(args)
         end_t = time.monotonic()
