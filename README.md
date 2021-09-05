@@ -15,7 +15,7 @@ within the research activities in Saratov State University, Faculty of Computer 
 
 * `graph.py` script displays results.
 
-## Build-up
+## Build
 
 ### Targets
 
