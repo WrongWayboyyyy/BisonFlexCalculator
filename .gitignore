@@ -6,4 +6,5 @@ calc.tab.h
 .vscode/
 *.gch
 *.DS_Store
+tex
 *.csv
