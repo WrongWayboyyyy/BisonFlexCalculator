@@ -1,3 +1,3 @@
 [submodule "BFC-tex"]
-	path = tex
+	path = BFC-tex
 	url = git@github.com:WrongWayboyyyy/BFC-tex.git
