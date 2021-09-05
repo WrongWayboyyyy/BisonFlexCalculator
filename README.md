@@ -7,7 +7,7 @@ within the research activities in Saratov State University, Faculty of Computer 
 
 * Folder `src` contains parser source code + `Makefile` to build it.
 
-* Submodule folder `tex` contains *LaTeX* source files + built PDF-file. If you would like to get access to those files — contact the author.
+* Submodule folder `tex` contains *LaTeX* source files + built PDF-file. If you would like to get access to those files — please, contact the author.
 
 * Folder `tex-public` contains built PDF-file.
 
