@@ -32,7 +32,7 @@ void yyerror(arena*, const char *s);
 %%
 
 calclist: 
-    | calclist exp EOL { CALC_RESULT($2) }
+    | calclist exp EOL { CALC_RESULT($2); return 0; }
     | calclist EOL { printf("> "); }
 ;
 
@@ -57,8 +57,6 @@ char* terminateString(char* str) {
 
 int main(int argc, char** argv) {
 
-    printf("> ");
-
     const char* mode = argv[1];
     int code;
     if (!mode) {
@@ -78,41 +76,37 @@ int main(int argc, char** argv) {
     }
     const char* testString;
     int repeats = 1;
-    arena* arena = malloc(sizeof(arena));
-    arena_construct(arena);
 
-    yyparse(arena);
+    if (strcmp(mode, "benchmark") == 0) {
+        if (argc < 4) {
+            printf("%s", "Bad arguments");
+            return -1;
+        }
+        testString = terminateString(argv[2]);
+        repeats = atoi(argv[3]);
+        yy_scan_string(testString);
+    }
+    node* result;
 
-    // if (strcmp(mode, "benchmark") == 0) {
-    //     if (argc < 4) {
-    //         printf("%s", "Bad arguments");
-    //         return -1;
-    //     }
-    //     testString = terminateString(argv[2]);
-    //     repeats = atoi(argv[3]);
-    //     yy_scan_string(testString);
-    // }
-    // node* result;
-
-    // bool inProgress = true;
-    // while (inProgress) {
-    //     arena* arena = malloc(sizeof(arena));
-    //     arena_construct(arena);
-    //     if (strcmp(mode, "interactive") == 0)
-    //         printf("> ");
+    bool inProgress = true;
+    while (inProgress) {
+        arena* arena = malloc(sizeof(arena));
+        arena_construct(arena);
+        if (strcmp(mode, "interactive") == 0)
+            printf("> ");
         
-    //     result = arena->arena + yyparse(arena);
-    //     if (strcmp(mode, "benchmark") == 0) {
-    //         for (int i = 0; i < repeats; ++i) {
-    //             printf("%f\n" , eval(arena, result));
-    //         }   
-    //         inProgress = false;
-    //     }
-    //     else {
-    //         printf("= %f (allocated: %i)\n", eval(arena, result), arena->allocated);
-    //     }
-    //     arena_free(arena);
-    // }
+        result = arena->arena + yyparse(arena);
+        // if (strcmp(mode, "benchmark") == 0) {
+        //     for (int i = 0; i < repeats; ++i) {
+        //         printf("%f\n" , eval(arena));
+        //     }   
+        //     inProgress = false;
+        // }
+        // else {
+        //     printf("= %f (allocated: %i)\n", eval(arena), arena->allocated);
+        // }
+        // arena_free(arena);
+    }
     return 0;
 }
 

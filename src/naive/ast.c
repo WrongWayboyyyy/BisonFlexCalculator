@@ -1,9 +1,7 @@
-#ifndef _AST_H_
-#define _AST_H_
-
-#define YYSTYPE double
-
-extern int yylineno;
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include "ast.h"
 
 #define CALC_ADD(TOP, L, R) TOP = L + R
 #define CALC_SUB(TOP, L, R) TOP = L - R
@@ -12,6 +10,4 @@ extern int yylineno;
 #define CALC_ABS(TOP, ARG) TOP = fabs(ARG)
 #define CALC_NEG(TOP, ARG) TOP = -ARG
 #define CALC_NUM(TOP, ARG) TOP = ARG
-#define CALC_RESULT(TOP) printf("%f \n> ", TOP);
-
-#endif /* _AST_H_ */
+#define CALC_RESULT(TOP) printf("%f \n> ", TOP)
