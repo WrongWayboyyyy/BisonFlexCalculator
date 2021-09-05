@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
     
 
     const char* testString;
-    int repeats;
+    int iterations;
 
     if (calc_mode == benchmark) {
         if (argc < 5) {
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
             return -1;
         }
         testString = terminateString(argv[3]);
-        repeats = atoi(argv[4]);
+        iterations = atoi(argv[4]);
     }
 
     bool in_progress = true;
@@ -123,10 +123,19 @@ int main(int argc, char** argv) {
         }
         
         if (calc_mode == benchmark) {
-            for (int i = 0; i < repeats; ++i) {
+            if (calc_version == naive) {
+                for (int i = 0; i < iterations; ++i) {
+                    yy_scan_string(testString);
+                    yyparse(arena);
+                }   
+            } else if (calc_version == ast) {
+
                 yy_scan_string(testString);
                 yyparse(arena);
-            }   
+                for (int i = 0; i < iterations; ++i) {
+                    printf("%f\n", CALC_RESULT(1));
+                }
+            }
             in_progress = false;
         }
         arena_free(arena);
