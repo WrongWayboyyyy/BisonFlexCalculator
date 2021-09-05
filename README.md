@@ -7,7 +7,9 @@ within the research activities in Saratov State University, Faculty of Computer 
 
 * Folder `src` contains parser source code + `Makefile` to build it.
 
-* Folder `tex` contains *LaTeX* source files + built PDF-file.
+* Submodule folder `tex` contains *LaTeX* source files + built PDF-file. If you would like to get access to those files — contact the author.
+
+* Folder `tex-public` contains built PDF-file.
 
 * Folder `csv` contains data provided by `test.py` script.
 
@@ -33,7 +35,7 @@ python benchmarking script.
 * `mode` — parser mode. Possible values: `interactive`, `benchmark`.
 Interactive mode allows you to use *stdin* as input, while `benchmark` mode collects data.
 
-* `version` — parser version. Possible values: `naive`, `arena`. Naive version does computing along with parsing, while arena version builts AST and then traverse it.
+* `version` (optional) — parser version. Possible values: `naive`, `arena`. Naive version does computing along with parsing, while arena version builts AST and then traverse it.
     > If not stated — uses arena management version.
 
 ### Benchmarking

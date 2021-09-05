@@ -3,7 +3,7 @@ cnt.l
 lex.yy.c
 calc.tab.c 
 calc.tab.h
-.vscode/
+*.vscode
 *.gch
 *.DS_Store
 tex
