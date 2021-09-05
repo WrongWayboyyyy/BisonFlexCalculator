@@ -14,6 +14,10 @@ extern void yy_scan_string(const char* str);
 extern double fabs(double);
 void yyerror(arena*, const char *s);
 
+typedef enum calc_mode_t {interactive, benchmark} calc_mode_t;
+
+typedef enum calc_version_t {naive, ast} calc_version_t;
+
 
 %}
 
@@ -57,57 +61,80 @@ char* terminateString(char* str) {
 
 int main(int argc, char** argv) {
 
+    calc_mode_t calc_mode;
+    calc_version_t calc_version;
+
     const char* mode = argv[1];
-    int code;
     if (!mode) {
         printf("%s", "No mode selected");
         return -1;
     }
+    else
     if (strcmp(mode, "benchmark") == 0) {
-        code = 1;
+        calc_mode = benchmark; 
     }
     else
     if (strcmp(mode, "interactive") == 0) {
-        code = 2;
+        calc_mode = interactive;
     }
     else {
         printf("%s", "Unknown mode selected");
         return -1;
     }
+
+    const char* version = argv[2];
+    if (!version) {
+        printf("No version selected");
+        return -1;
+    }
+    else
+    if (strcmp(version, "naive") == 0) {
+        calc_version = naive;
+    }
+    else
+    if (strcmp(version, "arena") == 0) {
+        calc_version = ast;
+    }
+    else {
+        printf("%s", "Unknown version selected");
+        return -1;
+    }
+    
+
     const char* testString;
-    int repeats = 1;
+    int repeats;
 
-
-    if (strcmp(mode, "benchmark") == 0) {
-        if (argc < 4) {
-            printf("%s", "Bad arguments");
+    if (calc_mode == benchmark) {
+        if (argc < 5) {
+            printf("%s", "Too few arguments");
             return -1;
         }
-        testString = terminateString(argv[2]);
-        repeats = atoi(argv[3]);
-        yy_scan_string(testString);
+        testString = terminateString(argv[3]);
+        repeats = atoi(argv[4]);
     }
 
-    bool inProgress = true;
-    while (inProgress) {
+    bool in_progress = true;
+    while (in_progress) {
         arena* arena = malloc(sizeof(arena));
         arena_construct(arena);
-        if (strcmp(mode, "interactive") == 0)
+        if (calc_mode == interactive) {
             printf("> ");
+            yyparse(arena);
+        }
         
-        yyparse(arena);
-        if (strcmp(mode, "benchmark") == 0) {
+        if (calc_mode == benchmark) {
             for (int i = 0; i < repeats; ++i) {
+                yy_scan_string(testString);
                 yyparse(arena);
             }   
-            inProgress = false;
+            in_progress = false;
         }
         arena_free(arena);
     }
     return 0;
 }
 
-void yyerror (arena*, const char* s) {
+void yyerror (arena* arena, const char* s) {
     fprintf(stderr, "%d: error: ", yylineno);
     fprintf(stderr, "\n");
 }
