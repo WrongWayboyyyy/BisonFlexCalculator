@@ -12,6 +12,6 @@ extern int yylineno;
 #define CALC_ABS(TOP, ARG) TOP = fabs(ARG)
 #define CALC_NEG(TOP, ARG) TOP = -ARG
 #define CALC_NUM(TOP, ARG) TOP = ARG
-#define CALC_RESULT(TOP) printf("%f \n", TOP)
+#define CALC_RESULT(TOP) TOP
 
 #endif /* _AST_H_ */

@@ -11,58 +11,58 @@ unsigned int newnode (arena* arena, int nodetype, unsigned int l, unsigned int r
         exit(0);
     }
     node* block = arena->arena + n;
-    block->l = l;
-    block->r = r;
+    block->op.l = l;
+    block->op.r = r;
     block->nodetype = nodetype;
     
     return n;
 }
 
 unsigned int newnum (arena* arena, double d) {
-    unsigned int a = arena_allocate(arena, 2);
+    unsigned int a = arena_allocate(arena, 1);
     if (a < 0) {
         yyerror(arena, "Not enough memory");
         exit(0); 
     }
-    value* val = (value*)(arena->arena + a);
-    val->nodetype = 'K';
-    val->number = d;
+    node* value = arena->arena + a;
+    value->nodetype = 'K';
+    value->val = d;
     return a;
 }
 
 double eval (arena* arena) {
-    double result = 0;
-    double first_arg = 0;
-    double second_arg = 0;
-    node* block = arena->arena;
-    int index = 0;
-    while (index < arena->allocated) {
-        node* node = block + index;
-        unsigned int type = node->nodetype;
-        switch (type) {
+    double results[arena->allocated];
+
+    for (int i = 0; i < arena->allocated; ++i) {
+        node* node = &arena->arena[i];
+        switch (node->nodetype) {
             case 'K' : {
-                value* val = (value*) node;
-                first_arg = second_arg;
-                second_arg = val->number;
-                index += 2;
+                results[i] = node->val;
                 break;
             }
-            case '+': {
-                second_arg += first_arg;
-                index += 1;
+            case '+' : {
+                results[i] = results[node->op.l] + results[node->op.r];
                 break;
             }
-            case '-': {
-                first_arg -= second_arg;
-                double tmp = first_arg;
-                first_arg = second_arg;
-                second_arg = tmp;
-                index += 1;
+            case '-' :
+                results[i] = results[node->op.l] - results[node->op.r];
                 break;
-            }
+            case '*' :
+                results[i] = results[node->op.l] * results[node->op.r];
+                break;
+            case '/' :
+                results[i] = results[node->op.l] / results[node->op.r];
+                break;
+            case '|' :
+                results[i] = fabs(results[node->op.l]);
+                break;
+            case 'M' :
+                results[i] = -results[node->op.l];
+                break;
+            default:
+                printf("Internal error: bad node %c\n", node->nodetype);
+                break;
         }
-        printf("%f, %f \n", first_arg, second_arg);
     }
-    printf("\n");
-    return second_arg;
+    return results[arena->allocated - 1];
 }

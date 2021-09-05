@@ -32,7 +32,7 @@ void yyerror(arena*, const char *s);
 %%
 
 calclist: 
-    | calclist exp EOL { CALC_RESULT($2); return 0; }
+    | calclist exp EOL { printf("%f \n", CALC_RESULT($2)); return 0; }
     | calclist EOL { printf("> "); }
 ;
 
@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
     const char* testString;
     int repeats = 1;
 
+
     if (strcmp(mode, "benchmark") == 0) {
         if (argc < 4) {
             printf("%s", "Bad arguments");
@@ -86,7 +87,6 @@ int main(int argc, char** argv) {
         repeats = atoi(argv[3]);
         yy_scan_string(testString);
     }
-    node* result;
 
     bool inProgress = true;
     while (inProgress) {
@@ -95,17 +95,14 @@ int main(int argc, char** argv) {
         if (strcmp(mode, "interactive") == 0)
             printf("> ");
         
-        result = arena->arena + yyparse(arena);
-        // if (strcmp(mode, "benchmark") == 0) {
-        //     for (int i = 0; i < repeats; ++i) {
-        //         printf("%f\n" , eval(arena));
-        //     }   
-        //     inProgress = false;
-        // }
-        // else {
-        //     printf("= %f (allocated: %i)\n", eval(arena), arena->allocated);
-        // }
-        // arena_free(arena);
+        yyparse(arena);
+        if (strcmp(mode, "benchmark") == 0) {
+            for (int i = 0; i < repeats; ++i) {
+                yyparse(arena);
+            }   
+            inProgress = false;
+        }
+        arena_free(arena);
     }
     return 0;
 }
