@@ -114,8 +114,9 @@ int main(int argc, char** argv) {
     }
 
     bool in_progress = true;
-    if (calc_version == arena) {
-        arena* arena = malloc(sizeof(arena));
+    arena* arena;
+    if (calc_version == ast) {
+        arena = malloc(sizeof(arena));
         arena_construct(arena);
     }
     while (in_progress) {
@@ -141,7 +142,7 @@ int main(int argc, char** argv) {
             in_progress = false;
         }
     }
-    if (calc_version == arena) {
+    if (calc_version == ast) {
         arena_free(arena);
     }
     return 0;
