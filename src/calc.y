@@ -114,9 +114,12 @@ int main(int argc, char** argv) {
     }
 
     bool in_progress = true;
-    while (in_progress) {
-        arena* arena = malloc(sizeof(arena));
+    arena* arena;
+    if (calc_version == ast) {
+        arena = malloc(sizeof(arena));
         arena_construct(arena);
+    }
+    while (in_progress) {
         if (calc_mode == interactive) {
             printf("> ");
             yyparse(arena);
@@ -138,6 +141,8 @@ int main(int argc, char** argv) {
             }
             in_progress = false;
         }
+    }
+    if (calc_version == ast) {
         arena_free(arena);
     }
     return 0;
