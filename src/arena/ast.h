@@ -3,13 +3,11 @@
 #include "node.h"
 #include "arena.h"
 
-#define YYSTYPE unsigned int
+#define YYSTYPE double
 #define CALC_MODE ARENA
 
 typedef struct arena_t arena_t;
 typedef struct node_t node_t;
-
-extern int yylineno;
 
 unsigned int newnode ( arena_t* arena, int nodetype, 
                        unsigned int l, unsigned int r );

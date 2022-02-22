@@ -22,4 +22,4 @@ typedef struct value_t {
 } value_t;
 
 
-#endif
+#endif /* _NODE_H_ */

@@ -12,6 +12,7 @@ int yylex ();
 int yyparse (arena_t*);
 extern void yy_scan_string (const char* str);
 extern double fabs (double);
+extern int yylineno;
 void yyerror (arena_t*, const char *s);
 
 typedef enum calc_mode_t {interactive, benchmark} calc_mode_t;
@@ -27,10 +28,6 @@ typedef enum calc_version_t {naive, ast} calc_version_t;
 %left '+' '-'
 %left '*' '/'
 %nonassoc '|' UMINUS
-%code requires {
-    #include <ast.h>
-    #include "arena/arena.h"
-}
 %param {arena_t* arena}
 
 %%
@@ -52,7 +49,7 @@ exp:  exp '+' exp          { CALC_ADD ($$, $1, $3); }
 
 %%
 
-char* terminateString (char* str) {
+char* terminate_string (char* str) {
     char* src = malloc ((strlen (str) + 1) * sizeof (char));
     strcpy (src, str);
     src[strlen (str)] = '\n';
@@ -101,7 +98,7 @@ int main (int argc, char** argv) {
     }
     
 
-    const char* testString;
+    const char* test_string;
     int iterations;
 
     if (calc_mode == benchmark) {
@@ -109,7 +106,7 @@ int main (int argc, char** argv) {
             printf ("%s", "Too few arguments");
             return -1;
         }
-        testString = terminateString (argv[3]);
+        test_string = terminate_string (argv[3]);
         iterations = atoi (argv[4]);
     }
 
@@ -128,15 +125,15 @@ int main (int argc, char** argv) {
         if (calc_mode == benchmark) {
             if (calc_version == naive) {
                 for (int i = 0; i < iterations; ++i) {
-                    yy_scan_string (testString);
+                    yy_scan_string (test_string);
                     yyparse (arena);
                 }   
             } else if (calc_version == ast) {
 
-                yy_scan_string (testString);
+                yy_scan_string (test_string);
                 yyparse (arena);
                 for (int i = 0; i < iterations; ++i) {
-                    printf ("%f\n", CALC_RESULT (1));
+                    printf ("%f\n", CALC_RESULT (0.0));
                 }
             }
             in_progress = false;
