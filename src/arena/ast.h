@@ -3,7 +3,7 @@
 #include "node.h"
 #include "arena.h"
 
-#define YYSTYPE double
+#define YYSTYPE unsigned int
 #define CALC_MODE ARENA
 
 typedef struct arena_t arena_t;

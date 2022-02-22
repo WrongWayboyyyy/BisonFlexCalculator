@@ -1,12 +1,10 @@
 %{
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <setjmp.h>
 #include <ast.h>
-#include "arena/arena.h"
 #include <stdbool.h>
+#include "arena/arena.h"
 
 int yylex ();
 int yyparse (arena_t*);
@@ -66,12 +64,10 @@ int main (int argc, char** argv) {
         printf ("%s", "No mode selected");
         return -1;
     }
-    else
-    if (strcmp (mode, "benchmark") == 0) {
+    else if (strcmp (mode, "benchmark") == 0) {
         calc_mode = benchmark; 
     }
-    else
-    if (strcmp (mode, "interactive") == 0) {
+    else if (strcmp (mode, "interactive") == 0) {
         calc_mode = interactive;
     }
     else {
@@ -84,19 +80,16 @@ int main (int argc, char** argv) {
         printf ("No version selected");
         return -1;
     }
-    else
-    if (strcmp (version, "naive") == 0) {
+    else if (strcmp (version, "naive") == 0) {
         calc_version = naive;
-    }
-    else
-    if (strcmp (version, "arena") == 0) {
+    } 
+    else if (strcmp (version, "arena") == 0) {
         calc_version = ast;
     }
     else {
         printf("%s", "Unknown version selected");
         return -1;
     }
-    
 
     const char* test_string;
     int iterations;
