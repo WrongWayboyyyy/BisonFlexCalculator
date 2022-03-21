@@ -1,6 +1,6 @@
 .PHONY: clean build run
 
-version = arena
+version=arena
 PREFIX = ..
 right_bound = 101
 step = 5
@@ -9,15 +9,27 @@ CSV_FOLDER = csv
 BUILD_DIR = build
 SRC_DIR = src
 
+
+
+ifeq (${version},arena)
+	EXTRA_VERSION_FLAG=_ARENA_VERSION_
+endif
+ifeq (${version},naive)
+	EXTRA_VERSION_FLAG=_NAIVE_VERSION_
+endif
+
+LDFLAGS += -L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
+CFLAGS += -I/opt/homebrew/opt/llvm/include -o ${PREFIX}/calc.out -D${EXTRA_VERSION_FLAG}
+
 clean:
 	@rm -f calc.tab.c
 	@rm -f calc.tab.h
 	@rm -f lex.yy.c
 
-build: calc.l calc.y ${version}/ast.h
+build: calc.l calc.y ast.h
 	@bison -o calc.tab.c -d calc.y 
 	@flex -o lex.yy.c calc.l 
-	@cc -I${version} -o ${PREFIX}/calc.out ${version}/ast.c calc.tab.c lex.yy.c arena/arena.c
+	cc ${CFLAGS} ast.c calc.tab.c lex.yy.c arena/arena.c main.c ${LDFLAGS}
 
 run: build clean
 ifeq (${mode},benchmark)
