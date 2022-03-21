@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
         calc_mode = interactive;
     }
     else {
-        printf ("%s", "Unknown mode selected");
+        printf ("%s", "Unknown mode selected\n");
         return -1;
     }
 
@@ -87,7 +87,7 @@ int main (int argc, char** argv) {
         calc_version = ast;
     }
     else {
-        printf("%s", "Unknown version selected");
+        printf("%s", "Unknown version selected\n");
         return -1;
     }
 
