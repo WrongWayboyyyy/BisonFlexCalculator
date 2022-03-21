@@ -1,9 +1,13 @@
+.PHONY: clean build run
+
 version = arena
 PREFIX = ..
 right_bound = 101
 step = 5
 iter = 1000000
 CSV_FOLDER = csv
+BUILD_DIR = build
+SRC_DIR = src
 
 clean:
 	@rm -f calc.tab.c
@@ -11,8 +15,8 @@ clean:
 	@rm -f lex.yy.c
 
 build: calc.l calc.y ${version}/ast.h
-	@bison -d calc.y
-	@flex calc.l
+	@bison -o calc.tab.c -d calc.y 
+	@flex -o lex.yy.c calc.l 
 	@cc -I${version} -o ${PREFIX}/calc.out ${version}/ast.c calc.tab.c lex.yy.c arena/arena.c
 
 run: build clean

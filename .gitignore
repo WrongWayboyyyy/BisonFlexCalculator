@@ -8,3 +8,5 @@ calc.tab.h
 *.DS_Store
 tex
 *.csv
+*.cache
+compile_commands.json

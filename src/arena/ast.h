@@ -6,29 +6,28 @@
 #define YYSTYPE unsigned int
 #define CALC_MODE ARENA
 
-extern int yylineno;
+typedef struct arena_t arena_t;
+typedef struct node_t node_t;
 
-typedef struct arena arena;
-typedef struct node node;
+unsigned int newnode ( arena_t* arena, int nodetype, 
+                       unsigned int l, unsigned int r );
+unsigned int newnum (arena_t* arena, double d);
 
-unsigned int newnode (arena* arena, int nodetype, 
-    unsigned int l, unsigned int r);
-unsigned int newnum (arena* arena, double d);
+double eval (arena_t* arena);
 
-double eval (arena* arena);
+void treefree (node_t*);
 
-void treefree (node*);
+void yyerror (arena_t*, const char* s);
 
-void yyerror (arena*, const char* s);
-
-#define CALC_ADD(TOP, L, R) TOP = newnode(arena, '+', L, R)
-#define CALC_SUB(TOP, L, R) TOP = newnode(arena, '-', L, R)
-#define CALC_MUL(TOP, L, R) TOP = newnode(arena, '*', L, R)
-#define CALC_DIV(TOP, L, R) TOP = newnode(arena, '/', L, R)
-#define CALC_ABS(TOP, ARG) TOP = newnode(arena, '|', ARG, -1)
-#define CALC_NEG(TOP, ARG) TOP = newnode(arena, 'M', ARG, -1)
-#define CALC_NUM(TOP, ARG) TOP = newnum(arena, ARG)
-#define CALC_RESULT(TOP) eval(arena)
+#define CALC_ADD(TOP, L, R) TOP = newnode (arena, '+', L, R)
+#define CALC_SUB(TOP, L, R) TOP = newnode (arena, '-', L, R)
+#define CALC_MUL(TOP, L, R) TOP = newnode (arena, '*', L, R)
+#define CALC_DIV(TOP, L, R) TOP = newnode (arena, '/', L, R)
+#define CALC_ABS(TOP, ARG) TOP = newnode (arena, '|', ARG, -1)
+#define CALC_NEG(TOP, ARG) TOP = newnode (arena, 'M', ARG, -1)
+#define CALC_NUM(TOP, ARG) TOP = newnum (arena, ARG)
+// TODO: Remove unused argument
+#define CALC_RESULT(TOP) eval(arena) 
 
 
 #endif /* _AST_H_ */
