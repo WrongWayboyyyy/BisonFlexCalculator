@@ -2,6 +2,7 @@
 #define _ARENA_H_
 
 #include <stdlib.h>
+
 #include "node.h"
 
 #define DEFAULT_ARENA_SIZE 16
