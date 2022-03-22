@@ -1,6 +1,7 @@
 %option noyywrap nodefault yylineno
 %{
 #include "arena/arena.h"
+#include "calc.h"
 #include "calc.tab.h"
 %}
 

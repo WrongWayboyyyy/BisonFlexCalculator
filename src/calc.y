@@ -5,7 +5,8 @@
 #include <stdbool.h>
 
 #include "ast.h"
-#include "arena/arena.h"
+#include "naive.h"
+#include "jit.h"
 
 int yylex ();
 
@@ -17,7 +18,7 @@ int yylex ();
 %left '+' '-'
 %left '*' '/'
 %nonassoc '|' UMINUS
-%param {arena_t* arena}
+%param {calc_args_t args}
 %define api.value.type {double}
 
 %%

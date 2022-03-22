@@ -21,13 +21,14 @@ endif
 LDFLAGS += -L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
 CFLAGS += -I/opt/homebrew/opt/llvm/include -o ${PREFIX}/calc.out -D${EXTRA_VERSION_FLAG}
 
-SRC = ast.c calc.tab.c lex.yy.c arena/arena.c main.c llvm-c/llvm-init.c
+SRC = ast.c calc.tab.c lex.yy.c arena/arena.c main.c llvm-c/llvm-init.c naive.c
+
 clean:
 	@rm -f calc.tab.c
 	@rm -f calc.tab.h
 	@rm -f lex.yy.c
 
-build: calc.l calc.y ast.h
+build: calc.l calc.y
 	@bison -o calc.tab.c -d calc.y 
 	@flex -o lex.yy.c calc.l 
 	cc ${CFLAGS} ${SRC} ${LDFLAGS}
@@ -36,7 +37,7 @@ run: build
 ifeq (${mode},benchmark)
 	python3 ${PREFIX}/test.py ${PREFIX}/calc.out ${PREFIX}/csv/${version}.csv ${right_bound} ${step} ${iter} ${version}
 else
-	${PREFIX}/calc.out ${mode} ${version}
+	rlwrap ${PREFIX}/calc.out ${mode} ${version}
 endif
 
 	

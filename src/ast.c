@@ -6,10 +6,11 @@
 #include "ast.h"
 #include "calc.tab.h"
 
-unsigned int newnode (arena_t* arena, int nodetype, unsigned int l, unsigned int r) {
+unsigned int newnode (calc_args_t args, int nodetype, unsigned int l, unsigned int r) {
+    arena_t* arena = args.arena;
     unsigned int n = arena_allocate (arena, 1);
     if (n < 0) {
-        yyerror (arena, "Not enough memory");
+        yyerror (args, "Not enough memory");
         exit (0);
     }
     node_t* block = arena->arena + n;
@@ -20,23 +21,25 @@ unsigned int newnode (arena_t* arena, int nodetype, unsigned int l, unsigned int
     return n;
 }
 
-unsigned int newnum (arena_t* arena, double d) {
+unsigned int newnum (calc_args_t args, double d) {
+    arena_t* arena = args.arena;
     unsigned int a = arena_allocate (arena, 1);
     if (a < 0) {
-        yyerror (arena, "Not enough memory");
+        yyerror (args, "Not enough memory");
         exit (0); 
     }
-    node_t* value = arena->arena + a;
+    node_t *value = arena->arena + a;
     value->nodetype = 'K';
     value->val = d;
     return a;
 }
 
-double eval (arena_t* arena) {
+double eval (calc_args_t args) {
+    arena_t* arena = args.arena;
     double results[arena->allocated];
 
     for (int i = 0; i < arena->allocated; ++i) {
-        node_t* node = &arena->arena[i];
+        node_t *node = &arena->arena[i];
         switch (node->nodetype) {
             case 'K' : {
                 results[i] = node->val;
@@ -68,29 +71,3 @@ double eval (arena_t* arena) {
     }
     return results[arena->allocated - 1];
 }
-
-#ifdef _ARENA_VERSION_
-
-#define CALC_ADD(TOP, L, R) TOP = newnode (arena, '+', L, R)
-#define CALC_SUB(TOP, L, R) TOP = newnode (arena, '-', L, R)
-#define CALC_MUL(TOP, L, R) TOP = newnode (arena, '*', L, R)
-#define CALC_DIV(TOP, L, R) TOP = newnode (arena, '/', L, R)
-#define CALC_ABS(TOP, ARG) TOP = newnode (arena, '|', ARG, -1)
-#define CALC_NEG(TOP, ARG) TOP = newnode (arena, 'M', ARG, -1)
-#define CALC_NUM(TOP, ARG) TOP = newnum (arena, ARG)
-// TODO: Remove unused argument
-#define CALC_RESULT(TOP) eval(arena) 
-#endif /*_ARENA_VERSION_ */
-
-#ifdef _NAIVE_VERSION_
-
-#define CALC_ADD(TOP, L, R) TOP = L + R
-#define CALC_SUB(TOP, L, R) TOP = L - R
-#define CALC_MUL(TOP, L, R) TOP = L * R
-#define CALC_DIV(TOP, L, R) TOP = L / R
-#define CALC_ABS(TOP, ARG) TOP = fabs(ARG)
-#define CALC_NEG(TOP, ARG) TOP = -ARG
-#define CALC_NUM(TOP, ARG) TOP = ARG
-#define CALC_RESULT(TOP) TOP
-
-#endif /* _NAIVE_VERSION_ */
