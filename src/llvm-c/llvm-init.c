@@ -5,7 +5,7 @@
 #include "llvm-init.h"
 
 
-void llvm_init(LLVMModuleRef* mod, LLVMExecutionEngineRef* engine) {
+void llvm_init (LLVMModuleRef* mod, LLVMExecutionEngineRef* engine) {
 
     *mod = LLVMModuleCreateWithName ("calc");
 
@@ -41,5 +41,5 @@ void llvm_init(LLVMModuleRef* mod, LLVMExecutionEngineRef* engine) {
         LLVMDisposeMessage (error);
         exit (EXIT_FAILURE);
     }
-    
+
 }

@@ -9,11 +9,11 @@
 #include "llvm-c/llvm-init.h"
 
 int yylex ();
-int yyparse (arena_t*);
-extern void yy_scan_string (const char* str);
+int yyparse (arena_t *);
+extern void yy_scan_string (const char *str);
 extern double fabs (double);
 extern int yylineno;
-void yyerror (arena_t*, const char *s);
+void yyerror (arena_t *, const char *s);
 
 typedef enum calc_mode_t {interactive, benchmark} calc_mode_t;
 
