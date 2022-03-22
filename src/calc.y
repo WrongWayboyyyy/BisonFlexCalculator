@@ -2,8 +2,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "ast.h"
 #include <stdbool.h>
+
+#include "ast.h"
 #include "arena/arena.h"
 
 int yylex ();

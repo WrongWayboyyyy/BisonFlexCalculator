@@ -31,7 +31,7 @@ build: calc.l calc.y ast.h
 	@flex -o lex.yy.c calc.l 
 	cc ${CFLAGS} ast.c calc.tab.c lex.yy.c arena/arena.c main.c ${LDFLAGS}
 
-run: build clean
+run: build
 ifeq (${mode},benchmark)
 	python3 ${PREFIX}/test.py ${PREFIX}/calc.out ${PREFIX}/csv/${version}.csv ${right_bound} ${step} ${iter} ${version}
 else
