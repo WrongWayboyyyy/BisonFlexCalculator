@@ -75,43 +75,65 @@ int main (int argc, char **argv) {
     }
 
     bool in_progress = true;
-    calc_args_t args;
+    calc_args_t* args = malloc (sizeof (calc_args_t));
     if (calc_version == ast) {
-        args.arena = malloc (sizeof (arena_t));
-        arena_construct (args.arena);
+        args->arena = malloc (sizeof (arena_t));
+        arena_construct (args->arena);
     }
 
     LLVMModuleRef module;
     LLVMExecutionEngineRef engine;
-
-    llvm_init(&module, &engine);
+    LLVMBuilderRef builder;
+    LLVMValueRef value;
 
     while (in_progress) {
         if (calc_mode == interactive) {
+            llvm_init(&module, &engine, &builder, &value);
+            args->builder = builder;
+            args->value = value;
+
             printf ("> ");
-            yyparse (&args);
+            yyparse (args);
+            if (calc_version == jit) {
+                int (*f)(int) = LLVMGetFunctionAddress(engine, "func");
+                args->result = f(0);
+
+            }
+            
+            printf("%f\n", args->result);
         }
-        
+
         if (calc_mode == benchmark) {
             if (calc_version == naive) {
                 for (int i = 0; i < iterations; ++i) {
                     yy_scan_string (test_string);
-                    yyparse (&args);
+                    yyparse (args);
                 }   
             } else if (calc_version == ast) {
-
+                
                 yy_scan_string (test_string);
-                yyparse (&args);
                 for (int i = 0; i < iterations; ++i) {
-                    printf ("%f\n", CALC_RESULT (0.0));
+                    // printf ("%f\n", CALC_RESULT (0.0));
                 }
+            } else if (calc_version == jit) {
+                llvm_init(&module, &engine, &builder, &value);
+                yy_scan_string (test_string);
+                yyparse (args);
+                int (*f)(int) = LLVMGetFunctionAddress(engine, "func");
+                for (int i = 0; i < iterations; ++i) {
+                    printf("%d", f(0));
+                }
+                LLVMDisposeBuilder (args->builder);
+                LLVMDisposeModule (module);
             }
             in_progress = false;
         }
     }
     if (calc_version == ast) {
-        arena_free (args.arena);
+        arena_free (args->arena);
     }
+
+    llvm_verify(&module, &engine);
     return 0;
 }
 

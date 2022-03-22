@@ -17,6 +17,9 @@ endif
 ifeq (${version},naive)
 	EXTRA_VERSION_FLAG=_NAIVE_VERSION_
 endif
+ifeq (${version},jit)
+	EXTRA_VERSION_FLAG=_JIT_VERSION_
+endif
 
 LDFLAGS += -L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
 CFLAGS += -I/opt/homebrew/opt/llvm/include -o ${PREFIX}/calc.out -D${EXTRA_VERSION_FLAG}

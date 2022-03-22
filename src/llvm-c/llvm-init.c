@@ -5,41 +5,43 @@
 #include "llvm-init.h"
 
 
-void llvm_init (LLVMModuleRef* mod, LLVMExecutionEngineRef* engine) {
+void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
+               , LLVMBuilderRef* builder, LLVMValueRef* value ) {
 
-    *mod = LLVMModuleCreateWithName ("calc");
+    *module = LLVMModuleCreateWithName ("calc");
 
-    LLVMTypeRef param_types[] = { LLVMInt32Type (), LLVMInt32Type () };
+    LLVMTypeRef param_types[] = { LLVMInt32Type () };
     LLVMTypeRef ret_type = LLVMFunctionType (LLVMInt32Type ()
-                                            , param_types, 2, 0);
-    LLVMValueRef sum = LLVMAddFunction (*mod, "sum", ret_type);
+                                            , param_types, 1, 0);
+    LLVMValueRef func = LLVMAddFunction (*module, "func", ret_type);
 
-    LLVMBasicBlockRef entry = LLVMAppendBasicBlock (sum, "entry");
+    LLVMBasicBlockRef entry = LLVMAppendBasicBlock (func, "entry");
 
-    LLVMBuilderRef builder = LLVMCreateBuilder ();
-    LLVMPositionBuilderAtEnd (builder, entry);
+    *builder = LLVMCreateBuilder ();
+    *value = LLVMGetParam(func, 0);
+    LLVMPositionBuilderAtEnd (*builder, entry);
 
-    LLVMValueRef tmp = LLVMBuildAdd (builder, LLVMGetParam (sum, 0)
-                                            , LLVMGetParam (sum, 1)
-                                            , "tmp");
-    LLVMBuildRet (builder, tmp);
-
-    char *error = NULL;
-    LLVMVerifyModule (*mod, LLVMAbortProcessAction, &error);
-    LLVMDisposeMessage (error);
-
-    error = NULL;
     LLVMLinkInMCJIT ();
     LLVMInitializeNativeTarget ();
     LLVMInitializeNativeAsmPrinter ();
-    if (LLVMCreateExecutionEngineForModule (&(*engine), *mod, &error) != 0) {
+
+    char *error = NULL;
+    if (LLVMCreateExecutionEngineForModule (&(*engine), *module, &error) != 0) {
         fprintf (stderr, "failed to create execution engine\n");
         abort ();
     }
+
+}
+
+void llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) {
+    char *error = NULL;
+    LLVMVerifyModule (*module, LLVMAbortProcessAction, &error);
+    LLVMDisposeMessage (error);
+
     if (error) {
         fprintf (stderr, "error: %s\n", error);
         LLVMDisposeMessage (error);
         exit (EXIT_FAILURE);
     }
-
 }
+

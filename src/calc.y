@@ -19,12 +19,12 @@ int yylex ();
 %left '*' '/'
 %nonassoc '|' UMINUS
 %param {calc_args_t *args}
-%define api.value.type {double}
+%define api.value.type {calc_type_t}
 
 %%
 
 calclist: 
-    | calclist exp EOL { printf ("%f \n", CALC_RESULT ($2)); return 0; }
+    | calclist exp EOL { CALC_RESULT ($2); return 0; }
     | calclist EOL { printf ("> "); }
 ;
 

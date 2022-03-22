@@ -20,6 +20,9 @@ void treefree (node_t *);
 
 #ifdef _ARENA_VERSION_
 
+
+typedef double calc_type_t;
+
 #define CALC_ADD(TOP, L, R) TOP = newnode (args, '+', L, R)
 #define CALC_SUB(TOP, L, R) TOP = newnode (args, '-', L, R)
 #define CALC_MUL(TOP, L, R) TOP = newnode (args, '*', L, R)
@@ -28,7 +31,7 @@ void treefree (node_t *);
 #define CALC_NEG(TOP, ARG) TOP = newnode (args, 'M', ARG, -1)
 #define CALC_NUM(TOP, ARG) TOP = newnum (args, ARG)
 // TODO: Remove unused argument
-#define CALC_RESULT(TOP) eval(&args) 
+#define CALC_RESULT(TOP) args->result = eval(args) 
 
 #endif /*_ARENA_VERSION_ */
 
