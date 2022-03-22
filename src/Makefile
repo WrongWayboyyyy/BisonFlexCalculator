@@ -21,6 +21,7 @@ endif
 LDFLAGS += -L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
 CFLAGS += -I/opt/homebrew/opt/llvm/include -o ${PREFIX}/calc.out -D${EXTRA_VERSION_FLAG}
 
+SRC = ast.c calc.tab.c lex.yy.c arena/arena.c main.c llvm-c/llvm-init.c
 clean:
 	@rm -f calc.tab.c
 	@rm -f calc.tab.h
@@ -29,7 +30,7 @@ clean:
 build: calc.l calc.y ast.h
 	@bison -o calc.tab.c -d calc.y 
 	@flex -o lex.yy.c calc.l 
-	cc ${CFLAGS} ast.c calc.tab.c lex.yy.c arena/arena.c main.c ${LDFLAGS}
+	cc ${CFLAGS} ${SRC} ${LDFLAGS}
 
 run: build
 ifeq (${mode},benchmark)

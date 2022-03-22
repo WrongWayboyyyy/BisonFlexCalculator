@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
 
 #include "ast.h"
 #include "arena/arena.h"
+#include "llvm-c/llvm-init.h"
 
 int yylex ();
 int yyparse (arena_t*);
@@ -15,14 +17,7 @@ void yyerror (arena_t*, const char *s);
 
 typedef enum calc_mode_t {interactive, benchmark} calc_mode_t;
 
-typedef enum calc_version_t {naive, ast} calc_version_t;
-
-char* terminate_string (char* str) {
-    char* src = malloc ((strlen (str) + 1) * sizeof (char));
-    strcpy (src, str);
-    src[strlen (str)] = '\n';
-    return src;
-}
+typedef enum calc_version_t {naive, ast, jit} calc_version_t;
 
 int main (int argc, char** argv) {
 
@@ -32,7 +27,7 @@ int main (int argc, char** argv) {
     const char* mode = argv[1];
     if (!mode) {
         printf ("%s", "No mode selected");
-        return -1;
+        exit(EXIT_FAILURE);
     }
     else if (strcmp (mode, "benchmark") == 0) {
         calc_mode = benchmark; 
@@ -42,13 +37,13 @@ int main (int argc, char** argv) {
     }
     else {
         printf ("%s", "Unknown mode selected\n");
-        return -1;
+        exit(EXIT_FAILURE);
     }
 
     const char* version = argv[2];
     if (!version) {
         printf ("No version selected");
-        return -1;
+        exit(EXIT_FAILURE);
     }
     else if (strcmp (version, "naive") == 0) {
         calc_version = naive;
@@ -56,9 +51,12 @@ int main (int argc, char** argv) {
     else if (strcmp (version, "arena") == 0) {
         calc_version = ast;
     }
+    else if (strcmp (version, "jit") == 0) {
+        calc_version = jit;
+    }
     else {
         printf("%s", "Unknown version selected\n");
-        return -1;
+        exit(EXIT_FAILURE);
     }
 
     const char* test_string;
@@ -69,7 +67,7 @@ int main (int argc, char** argv) {
             printf ("%s", "Too few arguments");
             return -1;
         }
-        test_string = terminate_string (argv[3]);
+        test_string = argv[3];
         iterations = atoi (argv[4]);
     }
 
@@ -79,6 +77,12 @@ int main (int argc, char** argv) {
         arena = malloc (sizeof (arena_t));
         arena_construct (arena);
     }
+
+    LLVMModuleRef module;
+    LLVMExecutionEngineRef engine;
+
+    llvm_init(&module, &engine);
+
     while (in_progress) {
         if (calc_mode == interactive) {
             printf ("> ");
