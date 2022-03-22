@@ -10,15 +10,13 @@
 typedef struct arena_t arena_t;
 typedef struct node_t node_t;
 
-unsigned int newnode ( calc_args_t arena, int nodetype, 
+unsigned int newnode ( calc_args_t *arena, int nodetype, 
                        unsigned int l, unsigned int r );
-unsigned int newnum (calc_args_t arena, double d);
+unsigned int newnum (calc_args_t *arena, double d);
 
-double eval (calc_args_t);
+double eval (calc_args_t *);
 
-void treefree (node_t*);
-
-void yyerror (calc_args_t, const char* s);
+void treefree (node_t *);
 
 #ifdef _ARENA_VERSION_
 
@@ -30,7 +28,7 @@ void yyerror (calc_args_t, const char* s);
 #define CALC_NEG(TOP, ARG) TOP = newnode (args, 'M', ARG, -1)
 #define CALC_NUM(TOP, ARG) TOP = newnum (args, ARG)
 // TODO: Remove unused argument
-#define CALC_RESULT(TOP) eval(args) 
+#define CALC_RESULT(TOP) eval(&args) 
 
 #endif /*_ARENA_VERSION_ */
 

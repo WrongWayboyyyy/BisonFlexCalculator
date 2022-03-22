@@ -18,7 +18,7 @@ int yylex ();
 %left '+' '-'
 %left '*' '/'
 %nonassoc '|' UMINUS
-%param {calc_args_t args}
+%param {calc_args_t *args}
 %define api.value.type {double}
 
 %%

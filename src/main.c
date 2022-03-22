@@ -11,7 +11,7 @@
 #include "naive.h"
 
 int yylex ();
-int yyparse (calc_args_t);
+int yyparse (calc_args_t *);
 extern void yy_scan_string (const char *str);
 extern double fabs (double);
 extern int yylineno;
@@ -20,7 +20,7 @@ typedef enum calc_mode_t {interactive, benchmark} calc_mode_t;
 
 typedef enum calc_version_t {naive, ast, jit} calc_version_t;
 
-void yyerror (calc_args_t, const char *s);
+void yyerror (calc_args_t *, const char *s);
 
 int main (int argc, char **argv) {
 
@@ -89,19 +89,19 @@ int main (int argc, char **argv) {
     while (in_progress) {
         if (calc_mode == interactive) {
             printf ("> ");
-            yyparse (args);
+            yyparse (&args);
         }
         
         if (calc_mode == benchmark) {
             if (calc_version == naive) {
                 for (int i = 0; i < iterations; ++i) {
                     yy_scan_string (test_string);
-                    yyparse (args);
+                    yyparse (&args);
                 }   
             } else if (calc_version == ast) {
 
                 yy_scan_string (test_string);
-                yyparse (args);
+                yyparse (&args);
                 for (int i = 0; i < iterations; ++i) {
                     printf ("%f\n", CALC_RESULT (0.0));
                 }
@@ -115,7 +115,7 @@ int main (int argc, char **argv) {
     return 0;
 }
 
-void yyerror (calc_args_t args, const char *s) {
+void yyerror (calc_args_t *args, const char *s) {
     fprintf (stderr, "%d: error: ", yylineno);
     fprintf (stderr, "\n");
 }

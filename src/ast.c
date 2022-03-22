@@ -6,8 +6,8 @@
 #include "ast.h"
 #include "calc.tab.h"
 
-unsigned int newnode (calc_args_t args, int nodetype, unsigned int l, unsigned int r) {
-    arena_t* arena = args.arena;
+unsigned int newnode (calc_args_t* args, int nodetype, unsigned int l, unsigned int r) {
+    arena_t* arena = args->arena;
     unsigned int n = arena_allocate (arena, 1);
     if (n < 0) {
         yyerror (args, "Not enough memory");
@@ -21,8 +21,8 @@ unsigned int newnode (calc_args_t args, int nodetype, unsigned int l, unsigned i
     return n;
 }
 
-unsigned int newnum (calc_args_t args, double d) {
-    arena_t* arena = args.arena;
+unsigned int newnum (calc_args_t* args, double d) {
+    arena_t* arena = args->arena;
     unsigned int a = arena_allocate (arena, 1);
     if (a < 0) {
         yyerror (args, "Not enough memory");
@@ -34,8 +34,8 @@ unsigned int newnum (calc_args_t args, double d) {
     return a;
 }
 
-double eval (calc_args_t args) {
-    arena_t* arena = args.arena;
+double eval (calc_args_t* args) {
+    arena_t* arena = args->arena;
     double results[arena->allocated];
 
     for (int i = 0; i < arena->allocated; ++i) {
