@@ -15,6 +15,8 @@ typedef union calc_type_t {
     LLVMValueRef rvalue;
 } calc_type_t;
 
+#define PARSE_TOKEN() yylval.val = atof(yytext)
+
 #define CALC_ADD(TOP, L, R) TOP.rvalue = LLVMBuildAdd(args->builder, L.rvalue, R.rvalue, "add"); 
 
 #define CALC_SUB(TOP, L, R) TOP

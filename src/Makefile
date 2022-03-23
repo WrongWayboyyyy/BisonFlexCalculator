@@ -11,8 +11,8 @@ SRC_DIR = src
 
 
 
-ifeq (${version},arena)
-	EXTRA_VERSION_FLAG=_ARENA_VERSION_
+ifeq (${version},ast)
+	EXTRA_VERSION_FLAG=_AST_VERSION_
 endif
 ifeq (${version},naive)
 	EXTRA_VERSION_FLAG=_NAIVE_VERSION_

@@ -22,6 +22,13 @@ typedef enum calc_version_t {naive, ast, jit} calc_version_t;
 
 void yyerror (calc_args_t *, const char *s);
 
+char* terminate_string (char* str) {
+    char* src = malloc ((strlen (str) + 1) * sizeof (char));
+    strcpy (src, str);
+    src[strlen (str)] = '\n';
+    return src;
+}
+
 int main (int argc, char **argv) {
 
     calc_mode_t calc_mode;
@@ -42,6 +49,7 @@ int main (int argc, char **argv) {
         printf ("%s", "Unknown mode selected\n");
         exit (EXIT_FAILURE);
     }
+    printf("Mode selected: %s\n", mode);
 
     const char* version = argv[2];
     if (!version) {
@@ -51,7 +59,7 @@ int main (int argc, char **argv) {
     else if (strcmp (version, "naive") == 0) {
         calc_version = naive;
     } 
-    else if (strcmp (version, "arena") == 0) {
+    else if (strcmp (version, "ast") == 0) {
         calc_version = ast;
     }
     else if (strcmp (version, "jit") == 0) {
@@ -61,6 +69,7 @@ int main (int argc, char **argv) {
         printf("%s", "Unknown version selected\n");
         exit (EXIT_FAILURE);
     }
+    printf("Version selected: %s\n", version);
 
     const char *test_string;
     int iterations;
@@ -70,15 +79,27 @@ int main (int argc, char **argv) {
             printf ("%s", "Too few arguments");
             return -1;
         }
-        test_string = argv[3];
+        test_string = terminate_string (argv[3]);
+        printf("Test string: %s", test_string);
         iterations = atoi (argv[4]);
+        printf("Number of iterations: %d\n", iterations);
     }
 
     bool in_progress = true;
     calc_args_t* args = malloc (sizeof (calc_args_t));
+
+    if (!args) {
+        printf("error: Bad arguments allocation\n");
+        exit(EXIT_FAILURE);
+    }
+
     if (calc_version == ast) {
         args->arena = malloc (sizeof (arena_t));
         arena_construct (args->arena);
+        if (!args->arena) {
+            printf("error: Bad arena allocation\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     LLVMModuleRef module;
@@ -86,16 +107,21 @@ int main (int argc, char **argv) {
     LLVMBuilderRef builder;
     LLVMValueRef value;
 
+    llvm_init(&module, &engine, &builder, &value);
+
+    args->builder = builder;
+    args->value = value;
+
     while (in_progress) {
         if (calc_mode == interactive) {
-            llvm_init(&module, &engine, &builder, &value);
-            args->builder = builder;
-            args->value = value;
+            if (calc_version == jit) {
+                llvm_init (&module, &engine, &builder, &value);
+            }
 
             printf ("> ");
             yyparse (args);
             if (calc_version == jit) {
-                int (*f)(int) = LLVMGetFunctionAddress(engine, "func");
+                int (*f)(int) = LLVMGetFunctionAddress (engine, "func");
                 args->result = f(0);
 
             }
@@ -108,23 +134,23 @@ int main (int argc, char **argv) {
                 for (int i = 0; i < iterations; ++i) {
                     yy_scan_string (test_string);
                     yyparse (args);
+                    printf("%f\n", args->result);
                 }   
             } else if (calc_version == ast) {
-                
                 yy_scan_string (test_string);
+
+                yyparse(args);
                 for (int i = 0; i < iterations; ++i) {
-                    // printf ("%f\n", CALC_RESULT (0.0));
+                    // CALC_RESULT (0.0);
                 }
             } else if (calc_version == jit) {
-                llvm_init(&module, &engine, &builder, &value);
                 yy_scan_string (test_string);
                 yyparse (args);
-                int (*f)(int) = LLVMGetFunctionAddress(engine, "func");
                 for (int i = 0; i < iterations; ++i) {
+                    int (*f)(int) = LLVMGetFunctionAddress(engine, "func");
                     printf("%d", f(0));
                 }
-                LLVMDisposeBuilder (args->builder);
-                LLVMDisposeModule (module);
+
             }
             in_progress = false;
         }
@@ -133,7 +159,7 @@ int main (int argc, char **argv) {
         arena_free (args->arena);
     }
 
-    llvm_verify(&module, &engine);
+    // llvm_verify (&module, &engine);
     return 0;
 }
 

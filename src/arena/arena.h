@@ -16,7 +16,8 @@ typedef struct arena_t {
 
 extern int arena_construct (arena_t* arena); // 0 - ok, !0 - failure
 extern void arena_free (arena_t* arena); 
-extern int arena_allocate (arena_t* arena, unsigned int count); // -1 - failure, index in arena otherwise
+// -1 - failure, index in arena otherwise
+extern int arena_allocate (arena_t* arena, unsigned int count); 
 extern void arena_clear (arena_t* arena);
 
 #endif /* _ARENA_H_ */

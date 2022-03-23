@@ -10,25 +10,25 @@ int arena_construct (arena_t* arena) {
     return 0;
 }
 
-void arena_free (arena_t* arena) {
+void arena_free (arena_t *arena) {
     if (arena->arena != NULL)
         free (arena->arena);
     arena->arena = NULL;
 }
 
-void arena_clear (arena_t* arena) {
+void arena_clear (arena_t *arena) {
     arena->allocated = 0;
 }
 
-int arena_allocate (arena_t* arena, unsigned int count) {
+int arena_allocate (arena_t *arena, unsigned int count) {
     if (arena->allocated + count >= arena->size) {
-        unsigned int newSize = MULTIPLY_FACTOR * arena->size;
-        node_t* newArena = realloc (arena->arena, newSize  * sizeof(node_t));
-        if (NULL == newArena) {
+        unsigned int new_size = MULTIPLY_FACTOR * arena->size;
+        node_t *new_arena = realloc (arena->arena, new_size  * sizeof(node_t));
+        if (NULL == new_arena) {
             return -1;
         }
-        arena->arena = newArena;
-        arena->size = newSize;
+        arena->arena = new_arena;
+        arena->size = new_size;
     }
     unsigned int result = arena->allocated;
     arena->allocated += count;

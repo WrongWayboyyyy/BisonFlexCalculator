@@ -5,14 +5,14 @@
 #include "arena/arena.h"
 #include "ast.h"
 
-unsigned int newnode (calc_args_t* args, int nodetype, unsigned int l, unsigned int r) {
-    arena_t* arena = args->arena;
+unsigned int newnode (calc_args_t *args, int nodetype, unsigned int l, unsigned int r) {
+    arena_t *arena = args->arena;
     unsigned int n = arena_allocate (arena, 1);
     if (n < 0) {
-        yyerror (args, "Not enough memory");
+        yyerror (args, "Internal error: not enough memory");
         exit (0);
     }
-    node_t* block = arena->arena + n;
+    node_t *block = arena->arena + n;
     block->op.l = l;
     block->op.r = r;
     block->nodetype = nodetype;
@@ -20,8 +20,8 @@ unsigned int newnode (calc_args_t* args, int nodetype, unsigned int l, unsigned 
     return n;
 }
 
-unsigned int newnum (calc_args_t* args, double d) {
-    arena_t* arena = args->arena;
+unsigned int newnum (calc_args_t *args, double d) {
+    arena_t *arena = args->arena;
     unsigned int a = arena_allocate (arena, 1);
     if (a < 0) {
         yyerror (args, "Not enough memory");
@@ -33,10 +33,10 @@ unsigned int newnum (calc_args_t* args, double d) {
     return a;
 }
 
-double eval (calc_args_t* args) {
-    arena_t* arena = args->arena;
+double eval (calc_args_t *args) {
+    arena_t *arena = args->arena;
     double results[arena->allocated];
-
+    
     for (int i = 0; i < arena->allocated; ++i) {
         node_t *node = &arena->arena[i];
         switch (node->nodetype) {
@@ -67,6 +67,10 @@ double eval (calc_args_t* args) {
                 printf ("Internal error: bad node %c\n", node->nodetype);
                 break;
         }
+    }
+    if (arena->allocated == 0) {
+        printf("Internal error: no allocated memory");
+        exit(EXIT_FAILURE);
     }
     return results[arena->allocated - 1];
 }

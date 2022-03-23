@@ -5,8 +5,8 @@ import sys
 import numpy as np
 
 legend = []
-lower_y_lim = 1e9
-higher_y_lim = -1e9
+lower_y_lim = 1e-6
+higher_y_lim = 1e-7
 for index in range(1, len(sys.argv)):
     file_name = sys.argv[index]
     f = open(file_name, "r")

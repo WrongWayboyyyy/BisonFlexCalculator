@@ -5,6 +5,8 @@
 
 typedef double calc_type_t;
 
+#define PARSE_TOKEN() yylval = atof(yytext)
+
 #define CALC_ADD(TOP, L, R) TOP = L + R
 #define CALC_SUB(TOP, L, R) TOP = L - R
 #define CALC_MUL(TOP, L, R) TOP = L * R
