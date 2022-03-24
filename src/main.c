@@ -76,7 +76,7 @@ int main (int argc, char **argv) {
 
     if (calc_mode == benchmark) {
         if (argc < 5) {
-            printf ("%s", "Too few arguments");
+            printf ("%s", "Error: Too few arguments");
             return -1;
         }
         test_string = terminate_string (argv[3]);
@@ -86,10 +86,10 @@ int main (int argc, char **argv) {
     }
 
     bool in_progress = true;
-    calc_args_t* args = malloc (sizeof (calc_args_t));
+    calc_args_t *args = malloc (sizeof (calc_args_t));
 
     if (!args) {
-        printf("error: Bad arguments allocation\n");
+        printf("Error: Bad arguments allocation\n");
         exit(EXIT_FAILURE);
     }
 
@@ -97,7 +97,7 @@ int main (int argc, char **argv) {
         args->arena = malloc (sizeof (arena_t));
         arena_construct (args->arena);
         if (!args->arena) {
-            printf("error: Bad arena allocation\n");
+            printf("Error: Bad arena allocation\n");
             exit(EXIT_FAILURE);
         }
     }
@@ -107,21 +107,18 @@ int main (int argc, char **argv) {
     LLVMBuilderRef builder;
     LLVMValueRef value;
 
-    llvm_init(&module, &engine, &builder, &value);
-
-    args->builder = builder;
-    args->value = value;
-
     while (in_progress) {
         if (calc_mode == interactive) {
             if (calc_version == jit) {
                 llvm_init (&module, &engine, &builder, &value);
+                    args->builder = builder;
+                    args->value = value;
             }
 
             printf ("> ");
             yyparse (args);
             if (calc_version == jit) {
-                int (*f)(int) = LLVMGetFunctionAddress (engine, "func");
+                double (*f)(int) = LLVMGetFunctionAddress (engine, "func");
                 args->result = f(0);
 
             }
@@ -130,25 +127,21 @@ int main (int argc, char **argv) {
         }
 
         if (calc_mode == benchmark) {
+            yy_scan_string (test_string);
+            yyparse (args);
             if (calc_version == naive) {
                 for (int i = 0; i < iterations; ++i) {
                     yy_scan_string (test_string);
                     yyparse (args);
-                    printf("%f\n", args->result);
                 }   
             } else if (calc_version == ast) {
-                yy_scan_string (test_string);
-
-                yyparse(args);
                 for (int i = 0; i < iterations; ++i) {
-                    // CALC_RESULT (0.0);
+                    eval (args);
                 }
             } else if (calc_version == jit) {
-                yy_scan_string (test_string);
-                yyparse (args);
                 for (int i = 0; i < iterations; ++i) {
-                    int (*f)(int) = LLVMGetFunctionAddress(engine, "func");
-                    printf("%d", f(0));
+                    int (*f)(int) = LLVMGetFunctionAddress (engine, "func");
+                    f(0);
                 }
 
             }
@@ -159,11 +152,11 @@ int main (int argc, char **argv) {
         arena_free (args->arena);
     }
 
-    // llvm_verify (&module, &engine);
+    llvm_verify (&module, &engine);
     return 0;
 }
 
 void yyerror (calc_args_t *args, const char *s) {
-    fprintf (stderr, "%d: error: ", yylineno);
+    fprintf (stderr, "%d: Error: ", yylineno);
     fprintf (stderr, "\n");
 }

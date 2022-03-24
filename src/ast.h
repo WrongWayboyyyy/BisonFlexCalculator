@@ -20,7 +20,7 @@ void treefree (node_t *);
 
 #ifdef _AST_VERSION_
 
-typedef unsigned int calc_type_t;
+typedef double calc_type_t;
 
 #define PARSE_TOKEN() {    \
     yylval = atof(yytext);  \
@@ -34,7 +34,7 @@ typedef unsigned int calc_type_t;
 #define CALC_NEG(TOP, ARG) TOP = newnode (args, 'M', ARG, -1)
 #define CALC_NUM(TOP, ARG) TOP = newnum (args, ARG)
 // TODO: Remove unused argument
-#define CALC_RESULT(TOP) eval(args)
+#define CALC_RESULT(TOP) args->result = eval(args)
 
 #endif /*_AST_VERSION_ */
 

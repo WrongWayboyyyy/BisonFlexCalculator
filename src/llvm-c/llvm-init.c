@@ -1,24 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "funcs.h"
 #include "llvm-init.h"
-
 
 void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
                , LLVMBuilderRef* builder, LLVMValueRef* value ) {
 
     *module = LLVMModuleCreateWithName ("calc");
 
-    LLVMTypeRef param_types[] = { LLVMInt32Type () };
-    LLVMTypeRef ret_type = LLVMFunctionType (LLVMInt32Type ()
+    LLVMTypeRef param_types[] = { LLVMDoubleType () };
+    LLVMTypeRef ret_type = LLVMFunctionType (LLVMDoubleType ()
                                             , param_types, 1, 0);
     LLVMValueRef func = LLVMAddFunction (*module, "func", ret_type);
 
     LLVMBasicBlockRef entry = LLVMAppendBasicBlock (func, "entry");
 
     *builder = LLVMCreateBuilder ();
-    *value = LLVMGetParam(func, 0);
+    *value = LLVMGetParam (func, 0);
     LLVMPositionBuilderAtEnd (*builder, entry);
 
     LLVMLinkInMCJIT ();
@@ -44,4 +42,3 @@ void llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) {
         exit (EXIT_FAILURE);
     }
 }
-

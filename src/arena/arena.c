@@ -3,7 +3,7 @@
 int arena_construct (arena_t* arena) {
     arena->size = DEFAULT_ARENA_SIZE;
     arena->allocated = 0;
-    arena->arena = malloc (sizeof(node_t) * DEFAULT_ARENA_SIZE);
+    arena->arena = malloc (sizeof (node_t) * DEFAULT_ARENA_SIZE);
     if (arena->arena == NULL) {
         return (!0);
     }

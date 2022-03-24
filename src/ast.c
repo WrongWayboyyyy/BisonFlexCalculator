@@ -9,7 +9,7 @@ unsigned int newnode (calc_args_t *args, int nodetype, unsigned int l, unsigned 
     arena_t *arena = args->arena;
     unsigned int n = arena_allocate (arena, 1);
     if (n < 0) {
-        yyerror (args, "Internal error: not enough memory");
+        yyerror (args, "Internal error: Not enough memory");
         exit (0);
     }
     node_t *block = arena->arena + n;
@@ -24,7 +24,7 @@ unsigned int newnum (calc_args_t *args, double d) {
     arena_t *arena = args->arena;
     unsigned int a = arena_allocate (arena, 1);
     if (a < 0) {
-        yyerror (args, "Not enough memory");
+        yyerror (args, "Internal error: Not enough memory");
         exit (0); 
     }
     node_t *value = arena->arena + a;
@@ -64,12 +64,12 @@ double eval (calc_args_t *args) {
                 results[i] = -results[node->op.l];
                 break;
             default:
-                printf ("Internal error: bad node %c\n", node->nodetype);
+                printf ("Internal error: Bad node %c\n", node->nodetype);
                 break;
         }
     }
     if (arena->allocated == 0) {
-        printf("Internal error: no allocated memory");
+        printf("Internal error: No allocated memory");
         exit(EXIT_FAILURE);
     }
     return results[arena->allocated - 1];
