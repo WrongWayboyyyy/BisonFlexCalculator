@@ -22,13 +22,6 @@ typedef enum calc_version_t {naive, ast, jit} calc_version_t;
 
 void yyerror (calc_args_t *, const char *s);
 
-char* terminate_string (char* str) {
-    char* src = malloc ((strlen (str) + 1) * sizeof (char));
-    strcpy (src, str);
-    src[strlen (str)] = '\n';
-    return src;
-}
-
 int main (int argc, char **argv) {
 
     calc_mode_t calc_mode;
@@ -79,7 +72,7 @@ int main (int argc, char **argv) {
             printf ("%s", "Error: Too few arguments");
             return -1;
         }
-        test_string = terminate_string (argv[3]);
+        test_string = argv[3];
         printf("Test string: %s", test_string);
         iterations = atoi (argv[4]);
         printf("Number of iterations: %d\n", iterations);
