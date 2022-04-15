@@ -23,4 +23,4 @@ main.c: expr.lex.h expr.tab.h
 PHONY: clean
 
 clean:
-	$(RM) $(BUILD_DIR)/*.tab.[ch] $(BUILD_DIR)*.lex.[ch] *.o main
+	$(RM) *.tab.[ch] *.lex.[ch] *.o main

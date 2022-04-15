@@ -7,8 +7,8 @@
 #include "expr.tab.h"
 
 typedef struct abstract_expr_calc_t {
-  char * expr;
-  void * extra;
+  char* expr;
+  void* extra;
   EXPR_STYPE (*calc) (struct abstract_expr_calc_t* );
   void (*destroy) (struct abstract_expr_calc_t* );
 } abstract_expr_calc_t;
@@ -39,11 +39,12 @@ EXPR_STYPE expr_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
   return (result);
 }
 
-void expr_parse_destroy (abstract_expr_calc_t * abstract_expr_calc)
+void expr_parse_destroy (abstract_expr_calc_t* abstract_expr_calc)
 {
+  return;
 }
 
-int expr_parse_init (abstract_expr_calc_t * abstract_expr_calc, char * expr)
+int expr_parse_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
 {
   abstract_expr_calc->expr = expr;
   abstract_expr_calc->extra = NULL;
