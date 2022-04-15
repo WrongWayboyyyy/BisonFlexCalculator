@@ -1,8 +1,10 @@
 cnt.l
 *.out
 lex.yy.c
-calc.tab.c 
-calc.tab.h
+*.tab.c 
+*.tab.h
+*.lex.h
+*.lex.c
 *.vscode
 *.gch
 *.DS_Store
