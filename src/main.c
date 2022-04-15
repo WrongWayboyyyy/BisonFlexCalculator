@@ -1,155 +1,104 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <stdbool.h>
 
-#include "arena/arena.h"
-#include "llvm-c/llvm-init.h"
+#include "expr.h"
+#include "expr.lex.h"
+#include "expr.tab.h"
 
-#include "ast.h"
-#include "naive.h"
+typedef struct abstract_expr_calc_t {
+  char * expr;
+  void * extra;
+  EXPR_STYPE (*calc) (struct abstract_expr_calc_t* );
+  void (*destroy) (struct abstract_expr_calc_t* );
+} abstract_expr_calc_t;
 
-int yylex ();
-int yyparse (calc_args_t *);
-extern void yy_scan_string (const char *str);
-extern double fabs (double);
-extern int yylineno;
+EXPR_STYPE expr_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
+{
+  yyscan_t scanner;
+  EXPR_STYPE result = 0;
 
-typedef enum calc_mode_t {interactive, benchmark} calc_mode_t;
-
-typedef enum calc_version_t {naive, ast, jit} calc_version_t;
-
-void yyerror (calc_args_t *, const char *s);
-
-int main (int argc, char **argv) {
-
-    calc_mode_t calc_mode;
-    calc_version_t calc_version;
-
-    const char *mode = argv[1];
-    if (!mode) {
-        printf ("%s", "No mode selected");
-        exit (EXIT_FAILURE);
-    }
-    else if (strcmp (mode, "benchmark") == 0) {
-        calc_mode = benchmark; 
-    }
-    else if (strcmp (mode, "interactive") == 0) {
-        calc_mode = interactive;
-    }
-    else {
-        printf ("%s", "Unknown mode selected\n");
-        exit (EXIT_FAILURE);
-    }
-    printf("Mode selected: %s\n", mode);
-
-    const char* version = argv[2];
-    if (!version) {
-        printf ("No version selected");
-        exit (EXIT_FAILURE);
-    }
-    else if (strcmp (version, "naive") == 0) {
-        calc_version = naive;
-    } 
-    else if (strcmp (version, "ast") == 0) {
-        calc_version = ast;
-    }
-    else if (strcmp (version, "jit") == 0) {
-        calc_version = jit;
-    }
-    else {
-        printf("%s", "Unknown version selected\n");
-        exit (EXIT_FAILURE);
-    }
-    printf("Version selected: %s\n", version);
-
-    const char *test_string;
-    int iterations;
-
-    if (calc_mode == benchmark) {
-        if (argc < 5) {
-            printf ("%s", "Error: Too few arguments");
-            return -1;
-        }
-        test_string = argv[3];
-        printf("Test string: %s", test_string);
-        iterations = atoi (argv[4]);
-        printf("Number of iterations: %d\n", iterations);
+  if (expr_lex_init_extra (&result, &scanner))
+    {
+      fprintf (stderr, "Failed to init scanner\n");
+      return (EXIT_FAILURE);
     }
 
-    bool in_progress = true;
-    calc_args_t *args = malloc (sizeof (calc_args_t));
+  if (NULL == expr__scan_string (abstract_expr_calc->expr, scanner))
+    {
+      fprintf (stderr, "Failed to init lexer\n");
+      return (EXIT_FAILURE);
+    }    
 
-    if (!args) {
-        printf("Error: Bad arguments allocation\n");
-        exit(EXIT_FAILURE);
+  if (expr_parse (scanner))
+    {
+      fprintf (stderr, "Failed to parse\n");
+      return (EXIT_FAILURE);
     }
 
-    if (calc_version == ast) {
-        args->arena = malloc (sizeof (arena_t));
-        arena_construct (args->arena);
-        if (!args->arena) {
-            printf("Error: Bad arena allocation\n");
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    LLVMModuleRef module;
-    LLVMExecutionEngineRef engine;
-    LLVMBuilderRef builder;
-    LLVMValueRef value;
-
-    while (in_progress) {
-        if (calc_mode == interactive) {
-            if (calc_version == jit) {
-                llvm_init (&module, &engine, &builder, &value);
-                    args->builder = builder;
-                    args->value = value;
-            }
-
-            printf ("> ");
-            yyparse (args);
-            if (calc_version == jit) {
-                double (*f)(int) = LLVMGetFunctionAddress (engine, "func");
-                args->result = f(0);
-
-            }
-            
-            printf("%f\n", args->result);
-        }
-
-        if (calc_mode == benchmark) {
-            yy_scan_string (test_string);
-            yyparse (args);
-            if (calc_version == naive) {
-                for (int i = 0; i < iterations; ++i) {
-                    yy_scan_string (test_string);
-                    yyparse (args);
-                }   
-            } else if (calc_version == ast) {
-                for (int i = 0; i < iterations; ++i) {
-                    eval (args);
-                }
-            } else if (calc_version == jit) {
-                for (int i = 0; i < iterations; ++i) {
-                    int (*f)(int) = LLVMGetFunctionAddress (engine, "func");
-                    f(0);
-                }
-
-            }
-            in_progress = false;
-        }
-    }
-    if (calc_version == ast) {
-        arena_free (args->arena);
-    }
-
-    llvm_verify (&module, &engine);
-    return 0;
+  return (result);
 }
 
-void yyerror (calc_args_t *args, const char *s) {
-    fprintf (stderr, "%d: Error: ", yylineno);
-    fprintf (stderr, "\n");
+void expr_parse_destroy (abstract_expr_calc_t * abstract_expr_calc)
+{
+}
+
+int expr_parse_init (abstract_expr_calc_t * abstract_expr_calc, char * expr)
+{
+  abstract_expr_calc->expr = expr;
+  abstract_expr_calc->extra = NULL;
+  abstract_expr_calc->calc = expr_parse_calc;
+  abstract_expr_calc->destroy = expr_parse_destroy;
+  return (EXIT_SUCCESS);
+}
+
+typedef enum {
+  CM_PARSE,
+  CM_AST,
+} calc_mode_t;
+
+int main (int argc, char * argv[])
+{
+  abstract_expr_calc_t abstract_expr_calc;
+  calc_mode_t calc_mode = CM_PARSE;
+  int repeat = 1;
+  int op;
+  
+  while ((op = getopt (argc, argv, "par:")) != -1)
+    switch (op)
+      {
+      case 'p':
+	calc_mode = CM_PARSE;
+	break;
+      case 'a':
+	calc_mode = CM_AST;
+	break;
+      case 'r':
+	repeat = atoi (optarg);
+	break;
+      }
+
+  switch (calc_mode)
+    {
+    case CM_PARSE:
+      expr_parse_init (&abstract_expr_calc, argv[optind]);
+      break;
+    case CM_AST:
+      expr_parse_init (&abstract_expr_calc, argv[optind]);
+      break;
+    }
+  
+  int i;
+  EXPR_STYPE sum = 0;
+  for (i = 0; i < repeat; ++i)
+    {
+      EXPR_STYPE result = abstract_expr_calc.calc (&abstract_expr_calc);
+      sum += result;
+    }
+
+  printf ("%s = %g\n", argv[optind], sum);
+
+  abstract_expr_calc.destroy (&abstract_expr_calc);
+
+  return (EXIT_SUCCESS);
 }
