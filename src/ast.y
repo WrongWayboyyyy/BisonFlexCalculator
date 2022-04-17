@@ -22,40 +22,48 @@ static void ast_error (void* scanner, char* error) {}
 
 %% 
 
-result: expr {
-    extra_t* extra = ast_get_extra (scanner);
-    *extra->result = eval (extra->arena);
+result: expr 
+{
+  extra_t* extra = ast_get_extra (scanner);
+  *extra->result = ast_eval (extra->arena);
 }
 
 expr:
-  expr '+' expr { 
+  expr '+' expr 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ = newnode (extra->arena, '+', $1, $3); 
+    $$ = ast_alloc_node (extra->arena, '+', $1, $3); 
   }
-| expr '-' expr { 
+| expr '-' expr 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ =  newnode (extra->arena, '-', $1, $3); 
+    $$ =  ast_alloc_node (extra->arena, '-', $1, $3); 
   }
-| expr '*' expr { 
+| expr '*' expr 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ =  newnode (extra->arena, '*', $1, $3); 
+    $$ =  ast_alloc_node (extra->arena, '*', $1, $3); 
   }
-| expr '/' expr { 
+| expr '/' expr 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ =  newnode (extra->arena, '/', $1, $3); 
+    $$ =  ast_alloc_node (extra->arena, '/', $1, $3); 
   }
-| '-' expr %prec UMINUS { 
+| '-' expr %prec UMINUS 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ = newnode (extra->arena, '|', $1, -1); 
+    $$ = ast_alloc_node (extra->arena, '|', $1, -1); 
   }
-| '+' expr %prec UMINUS { 
+| '+' expr %prec UMINUS 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ = newnode (extra->arena, 'M', $1, -1); 
+    $$ = ast_alloc_node (extra->arena, 'M', $1, -1); 
   }
 | '(' expr ')' { $$ = $2; }
-| NUMBER { 
+| NUMBER 
+  { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ = newnum (extra->arena, $1); 
-}
+    $$ = ast_alloc_num (extra->arena, $1); 
+  }
 
 %%

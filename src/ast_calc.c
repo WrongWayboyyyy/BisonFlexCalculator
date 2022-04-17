@@ -43,8 +43,14 @@ int ast_parse_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
 {
   abstract_expr_calc->expr = expr;
   arena_t* arena = malloc (sizeof (arena_t));
-  arena_construct (arena);
   extra_t* extra = malloc (sizeof (extra_t));
+  int rc = arena_construct (arena);
+  if (rc)
+    {
+      printf("Error while arena construction\n");
+      return (EXIT_FAILURE);
+    }
+
   extra->arena = arena;
   abstract_expr_calc->extra = extra;
   abstract_expr_calc->calc = ast_parse_calc;

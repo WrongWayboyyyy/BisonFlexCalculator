@@ -7,7 +7,8 @@
 #include "expr_calc.h"
 #include "ast_calc.h"
 
-typedef enum {
+typedef enum 
+{
   CM_PARSE,
   CM_AST,
 } calc_mode_t;
@@ -16,7 +17,7 @@ int main (int argc, char * argv[])
 {
   abstract_expr_calc_t abstract_expr_calc;
   calc_mode_t calc_mode = CM_PARSE;
-  int repeat = 1000000;
+  int repeat = 1;
   int op;
   
   while ((op = getopt (argc, argv, "par:")) != -1)

@@ -20,9 +20,10 @@
 
 %% 
 
-result: expr {
-    EXPR_STYPE* result = expr_get_extra (scanner);
-    *result = $1;
+result: expr 
+{
+  EXPR_STYPE* result = expr_get_extra (scanner);
+  *result = $1;
 }
 
 expr:

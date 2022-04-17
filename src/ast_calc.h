@@ -3,7 +3,8 @@
 
 #include "tree.h"
 
-typedef struct extra_t {
+typedef struct extra_t 
+{
   arena_t* arena;
   double* result;
 } extra_t;

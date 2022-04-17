@@ -8,10 +8,11 @@
 #define DEFAULT_ARENA_SIZE 16
 #define MULTIPLY_FACTOR 2
 
-typedef struct arena_t {
-    struct node_t* arena;
-    unsigned int size;
-    unsigned int allocated;
+typedef struct arena_t 
+{
+  struct node_t* arena;
+  unsigned int size;
+  unsigned int allocated;
 } arena_t;
 
 // 0 - ok, !0 - failure
