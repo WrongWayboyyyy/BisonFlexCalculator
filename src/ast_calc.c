@@ -4,33 +4,13 @@
 #include "ast.h"
 #include "ast.lex.h"
 #include "ast.tab.h"
+#include "tree.h"
 
 long double expr_ast_calc (abstract_expr_calc_t* abstract_expr_calc)
 {
-  yyscan_t scanner;
   extra_t* extra = abstract_expr_calc->extra;
-  double result = 0;
-  extra->result = &result;
 
-  if (ast_lex_init_extra (extra, &scanner))
-    {
-      fprintf (stderr, "Failed to init scanner\n");
-      exit (EXIT_FAILURE);
-    }
-
-  if (NULL == ast__scan_string (abstract_expr_calc->expr, scanner))
-    {
-      fprintf (stderr, "Failed to init lexer\n");
-      exit (EXIT_FAILURE);
-    }    
-
-  if (ast_parse (scanner))
-    {
-      fprintf (stderr, "Failed to parse\n");
-      exit (EXIT_FAILURE);
-    }
-
-  return result;
+  return ast_eval(extra->arena);
 }
 
 void expr_ast_destroy (abstract_expr_calc_t* abstract_expr_calc)
@@ -56,6 +36,26 @@ int expr_ast_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
   abstract_expr_calc->extra = extra;
   abstract_expr_calc->calc = expr_ast_calc;
   abstract_expr_calc->destroy = expr_ast_destroy;
+
+  yyscan_t scanner;
+  if (ast_lex_init_extra (extra, &scanner))
+    {
+      fprintf (stderr, "Failed to init scanner\n");
+      exit (EXIT_FAILURE);
+    }
+
+  if (NULL == ast__scan_string (abstract_expr_calc->expr, scanner))
+    {
+      fprintf (stderr, "Failed to init lexer\n");
+      exit (EXIT_FAILURE);
+    }    
+
+  if (ast_parse (scanner))
+    {
+      fprintf (stderr, "Failed to parse\n");
+      exit (EXIT_FAILURE);
+    }
+
   return (EXIT_SUCCESS);
 }
 

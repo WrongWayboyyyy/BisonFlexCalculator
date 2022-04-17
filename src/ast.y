@@ -24,8 +24,7 @@ static void ast_error (void* scanner, char* error) {}
 
 result: expr 
 {
-  extra_t* extra = ast_get_extra (scanner);
-  *extra->result = ast_eval (extra->arena);
+  
 }
 
 expr:

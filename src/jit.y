@@ -28,9 +28,6 @@ result: expr
 {
   extra_t* extra = jit_get_extra (scanner);
   LLVMBuildRet (extra->builder, $$.rvalue);
-  LLVMExecutionEngineRef engine = extra->engine;
-  double (*f)(int) = (double (*)(int)) LLVMGetFunctionAddress (engine, "func");
-  *extra->result = f(0);
 }
 
 expr:
