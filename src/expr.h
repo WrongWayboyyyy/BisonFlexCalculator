@@ -3,6 +3,5 @@
 
 #define EXPR_STYPE double
 #define YYSTYPE EXPR_STYPE
-#define YYLTYPE EXPR_STYPE
 
 #endif /* _EXPR_H_ */

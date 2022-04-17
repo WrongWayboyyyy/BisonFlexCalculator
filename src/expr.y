@@ -1,8 +1,7 @@
 %code top {
-#include "expr.h"
-#include "expr.lex.h"
-
-static void expr_error (void* scanner, char* error) {}
+  #include "expr.h"
+  #include "expr.lex.h"
+  static void expr_error (void* scanner, char* error) {}
 }
 
 %param {void* scanner}

@@ -12,7 +12,7 @@ CC=cc
 
 main: main.o expr.tab.o expr.lex.o expr_calc.o
 
-main.c: expr.lex.h expr.tab.h ast.lex.h ast.tab.h
+main.c: expr.lex.h expr.tab.h
 
 PHONY: clean
 
