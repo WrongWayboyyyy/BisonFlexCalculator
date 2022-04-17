@@ -1,5 +1,5 @@
-#ifndef _LLVM_INIT_H_
-#define _LLVM_INIT_H_
+#ifndef _LLVM_H_
+#define _LLVM_H_
 
 #include <llvm-c/Core.h>
 #include <llvm-c/ExecutionEngine.h>
@@ -13,5 +13,4 @@ void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
 void llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine);
 
 
-#endif /* _LLVM_INIT_H_ */
-
+#endif /* _LLVM_H_ */

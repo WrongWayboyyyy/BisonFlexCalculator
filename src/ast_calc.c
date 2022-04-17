@@ -1,8 +1,9 @@
+#include <stdlib.h>
+
 #include "ast_calc.h"
 #include "ast.h"
 #include "ast.lex.h"
 #include "ast.tab.h"
-#include <stdlib.h>
 
 double ast_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
 {
@@ -29,7 +30,7 @@ double ast_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
       exit (EXIT_FAILURE);
     }
 
-  return (*extra->result);
+  return result;
 }
 
 void ast_parse_destroy (abstract_expr_calc_t* abstract_expr_calc)

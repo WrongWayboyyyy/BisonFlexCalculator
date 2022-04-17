@@ -52,12 +52,12 @@ expr:
 | '-' expr %prec UMINUS 
   { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ = ast_alloc_node (extra->arena, '|', $1, -1); 
+    $$ = ast_alloc_node (extra->arena, '|', $2, -1); 
   }
-| '+' expr %prec UMINUS 
+| '|' expr %prec UMINUS 
   { 
     extra_t* extra = ast_get_extra (scanner);
-    $$ = ast_alloc_node (extra->arena, 'M', $1, -1); 
+    $$ = ast_alloc_node (extra->arena, 'M', $2, -1); 
   }
 | '(' expr ')' { $$ = $2; }
 | NUMBER 
