@@ -11,9 +11,9 @@ CC=cc
 %.lex.h %.lex.c: %.l
 	$(LEX) --header-file=$*.lex.h -o $*.lex.c $<
 
-main: main.o expr.tab.o expr.lex.o ast.tab.o ast.lex.o jit.tab.o jit.lex.o expr_calc.o ast_calc.o jit_calc.o tree.o arena.o llvm.o
+main: main.o parser.tab.o parser.lex.o ast.tab.o ast.lex.o jit.tab.o jit.lex.o parser_calc.o ast_calc.o jit_calc.o tree.o arena.o llvm.o
 
-main.c: expr.lex.h expr.tab.h ast.lex.h ast.tab.h jit.lex.h jit.tab.h
+main.c: parser.lex.h parser.tab.h ast.lex.h ast.tab.h jit.lex.h jit.tab.h
 
 PHONY: clean
 

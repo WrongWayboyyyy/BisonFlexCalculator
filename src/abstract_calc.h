@@ -5,7 +5,7 @@ typedef struct abstract_expr_calc_t
 {
   char* expr;
   void* extra;
-  double (*calc) (struct abstract_expr_calc_t* );
+  long double (*calc) (struct abstract_expr_calc_t* );
   void (*destroy) (struct abstract_expr_calc_t* );
 } abstract_expr_calc_t;
 

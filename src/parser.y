@@ -1,11 +1,11 @@
 %code top {
-  #include "expr.h"
-  #include "expr.lex.h"
-  static void expr_error (void* scanner, char* error) {}
+#include "parser.h"
+#include "parser.lex.h"
+static void parser_error (void* scanner, char* error) {}
 }
 
 %param {void* scanner}
-%define api.prefix {expr_}
+%define api.prefix {parser_}
 %define api.pure full
 
 %token NUMBER
@@ -22,7 +22,7 @@
 
 result: expr 
 {
-  EXPR_STYPE* result = expr_get_extra (scanner);
+  PARSER_STYPE* result = parser_get_extra (scanner);
   *result = $1;
 }
 

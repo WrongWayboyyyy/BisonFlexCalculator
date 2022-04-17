@@ -10,7 +10,7 @@ unsigned int ast_alloc_node ( arena_t* arena, int nodetype
   unsigned int index = arena_allocate (arena, 1);
   if (index < 0) 
     {
-      printf ("Internal error: Not enough memory");
+      fprintf (stderr, "Internal AST error: Not enough memory");
       exit (EXIT_FAILURE);
     }
   node_t* block = arena->arena + index;
@@ -26,7 +26,7 @@ unsigned int ast_alloc_num (arena_t* arena, double d)
   unsigned int index = arena_allocate (arena, 1);
   if (index < 0) 
     {
-      printf ("Internal error: Not enough memory");
+      fprintf (stderr, "Internal AST error: Not enough memory");
       exit (EXIT_FAILURE); 
     }
   node_t* value = arena->arena + index;
@@ -66,13 +66,13 @@ double ast_eval (arena_t* arena)
             results[i] = -results[node->op.l];
             break;
           default:
-            printf ("Internal error: Bad node %c\n", node->nodetype);
+            fprintf (stderr, "Internal AST error: Bad node %c\n", node->nodetype);
             break;
         }
     }
     if (arena->allocated == 0) 
       {
-        printf ("Internal error: No allocated memory");
+        fprintf (stderr, "Internal AST error: No allocated memory");
         exit (EXIT_FAILURE);
       }
 

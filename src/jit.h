@@ -10,12 +10,12 @@ typedef struct extra_t
   double* result;
 } extra_t;
 
-typedef struct calc_type_t {
+typedef struct jit_value_t {
   LLVMValueRef rvalue;
   double val;
-} calc_type_t;
+} jit_value_t;
 
-#define JIT_STYPE calc_type_t
+#define JIT_STYPE jit_value_t
 #define YYSTYPE JIT_STYPE
 
 #endif /* _AST_H */

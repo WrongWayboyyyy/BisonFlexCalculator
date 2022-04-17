@@ -5,7 +5,7 @@
 #include "jit.lex.h"
 #include "jit.tab.h"
 
-double jit_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
+long double expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
 {
   yyscan_t scanner;
   extra_t* extra = abstract_expr_calc->extra;
@@ -33,12 +33,12 @@ double jit_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
   return result;
 }
 
-void jit_parse_destroy (abstract_expr_calc_t* abstract_expr_calc)
+void expr_jit_destroy (abstract_expr_calc_t* abstract_expr_calc)
 {
   return;
 }
 
-int jit_parse_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
+int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
 {
   abstract_expr_calc->expr = expr;
   extra_t* extra = malloc (sizeof (extra_t));
@@ -51,8 +51,8 @@ int jit_parse_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
   extra->builder = builder;
   extra->engine = engine;
   abstract_expr_calc->extra = extra;
-  abstract_expr_calc->calc = jit_parse_calc;
-  abstract_expr_calc->destroy = jit_parse_destroy;
+  abstract_expr_calc->calc = expr_jit_calc;
+  abstract_expr_calc->destroy = expr_jit_destroy;
   return (EXIT_SUCCESS);
 }
 

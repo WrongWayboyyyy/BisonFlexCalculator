@@ -21,7 +21,7 @@ EXP ([Ee][-+]?[0-9]+)
 ")"  {return yytext[0]; }
 [0-9]+"."[0-9]*{EXP}? |
 "."?[0-9]+{EXP}? { 
-    yylval->val = atof (yytext); 
+    yylval->val = strtold (yytext, NULL); 
     return NUMBER;
 }
 "//".*

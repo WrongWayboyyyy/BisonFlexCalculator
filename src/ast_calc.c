@@ -5,7 +5,7 @@
 #include "ast.lex.h"
 #include "ast.tab.h"
 
-double ast_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
+long double expr_ast_calc (abstract_expr_calc_t* abstract_expr_calc)
 {
   yyscan_t scanner;
   extra_t* extra = abstract_expr_calc->extra;
@@ -33,14 +33,14 @@ double ast_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
   return result;
 }
 
-void ast_parse_destroy (abstract_expr_calc_t* abstract_expr_calc)
+void expr_ast_destroy (abstract_expr_calc_t* abstract_expr_calc)
 {
   arena_t* arena = abstract_expr_calc->extra;
   arena_free (arena);
   return;
 }
 
-int ast_parse_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
+int expr_ast_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
 {
   abstract_expr_calc->expr = expr;
   arena_t* arena = malloc (sizeof (arena_t));
@@ -48,14 +48,14 @@ int ast_parse_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
   int rc = arena_construct (arena);
   if (rc)
     {
-      printf("Error while arena construction\n");
+      fprintf(stderr, "Error while arena construction\n");
       return (EXIT_FAILURE);
     }
 
   extra->arena = arena;
   abstract_expr_calc->extra = extra;
-  abstract_expr_calc->calc = ast_parse_calc;
-  abstract_expr_calc->destroy = ast_parse_destroy;
+  abstract_expr_calc->calc = expr_ast_calc;
+  abstract_expr_calc->destroy = expr_ast_destroy;
   return (EXIT_SUCCESS);
 }
 

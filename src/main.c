@@ -4,7 +4,7 @@
 #include <getopt.h>
 
 #include "abstract_calc.h"
-#include "expr_calc.h"
+#include "parser_calc.h"
 #include "ast_calc.h"
 #include "jit_calc.h"
 
@@ -42,13 +42,13 @@ int main (int argc, char * argv[])
   switch (calc_mode)
     {
     case CM_PARSE:
-      expr_parse_init (&abstract_expr_calc, argv[optind]);
+      expr_parser_init (&abstract_expr_calc, argv[optind]);
       break;
     case CM_AST:
-      ast_parse_init (&abstract_expr_calc, argv[optind]);
+      expr_ast_init (&abstract_expr_calc, argv[optind]);
       break;
     case CM_LLVM:
-      jit_parse_init (&abstract_expr_calc, argv[optind]);
+      expr_jit_init (&abstract_expr_calc, argv[optind]);
       break;
     }
   

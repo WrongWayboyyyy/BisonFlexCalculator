@@ -1,10 +1,10 @@
 %option 8bit reentrant bison-bridge
 %option warn nounput never-interactive noyywrap
 %option extra-type="void*"
-%option prefix="expr_"
+%option prefix="parser_"
 %{
-#include "expr.h"
-#include "expr.tab.h"
+#include "parser.h"
+#include "parser.tab.h"
 #define YY_NO_INPUT
 %}
 

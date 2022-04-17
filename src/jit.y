@@ -10,7 +10,7 @@ static void jit_error (void* scanner, char* error) {}
 %param {void* scanner}
 %define api.prefix {jit_}
 %define api.pure full
-%define api.value.type {calc_type_t}
+%define api.value.type {jit_value_t}
 
 %token NUMBER
 

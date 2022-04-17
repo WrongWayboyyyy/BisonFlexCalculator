@@ -10,7 +10,7 @@ typedef struct extra_t
   double* result;
 } extra_t;
 
-#define AST_STYPE unsigned int
+#define AST_STYPE long double
 #define YYSTYPE AST_STYPE
 
 #endif /* _AST_H */
