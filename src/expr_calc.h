@@ -2,8 +2,6 @@
 #define _EXPR_CALC_H_
 
 #include "expr.h"
-#include "expr.lex.h"
-#include "expr.tab.h"
 #include "abstract_calc.h"
 
 EXPR_STYPE expr_parse_calc (abstract_expr_calc_t* abstract_expr_calc);

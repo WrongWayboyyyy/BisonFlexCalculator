@@ -4,6 +4,8 @@
 #include "arena.h"
 #include <math.h>
 
+typedef arena_t arena_t;
+
 unsigned int newnode ( arena_t* arena, int nodetype, 
                        unsigned int l, unsigned int r );
 unsigned int newnum (arena_t* arena, double d);

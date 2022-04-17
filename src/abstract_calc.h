@@ -1,8 +1,6 @@
 #ifndef _ABSTRACT_CALC_H_
 #define _ABSTRACT_CALC_H_
 
-#include "expr.h"
-
 typedef struct abstract_expr_calc_t {
   char* expr;
   void* extra;

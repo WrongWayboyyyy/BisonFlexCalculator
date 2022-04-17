@@ -1,7 +1,7 @@
 %code top {
-
 #include "ast.h"
 #include "ast.lex.h"
+#include "ast_calc.h"
 
 static void ast_error (void* scanner, char* error) {}
 }
@@ -23,40 +23,39 @@ static void ast_error (void* scanner, char* error) {}
 %% 
 
 result: expr {
-    AST_STYPE* result = ast_get_extra (scanner);
-    *result = $1;
+    extra_t* extra = ast_get_extra (scanner);
+    *extra->result = eval (extra->arena);
 }
 
 expr:
   expr '+' expr { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ = newnode (extra, '+', $1, $3); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ = newnode (extra->arena, '+', $1, $3); 
   }
 | expr '-' expr { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ =  newnode (extra, '-', $1, $3); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ =  newnode (extra->arena, '-', $1, $3); 
   }
 | expr '*' expr { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ =  newnode (extra, '*', $1, $3); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ =  newnode (extra->arena, '*', $1, $3); 
   }
 | expr '/' expr { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ =  newnode (extra, '/', $1, $3); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ =  newnode (extra->arena, '/', $1, $3); 
   }
 | '-' expr %prec UMINUS { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ = newnode (extra, '|', $1, -1); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ = newnode (extra->arena, '|', $1, -1); 
   }
 | '+' expr %prec UMINUS { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ = newnode (extra, 'M', $1, -1); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ = newnode (extra->arena, 'M', $1, -1); 
   }
 | '(' expr ')' { $$ = $2; }
 | NUMBER { 
-    arena_t* extra = ast_get_extra (scanner);
-    $$ = newnum (extra, $1); 
+    extra_t* extra = ast_get_extra (scanner);
+    $$ = newnum (extra->arena, $1); 
 }
-
 
 %%

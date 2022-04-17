@@ -1,4 +1,6 @@
 #include "expr_calc.h"
+#include "expr.lex.h"
+#include "expr.tab.h"
 
 double expr_parse_calc (abstract_expr_calc_t* abstract_expr_calc)
 {

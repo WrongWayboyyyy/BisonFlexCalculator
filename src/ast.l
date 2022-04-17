@@ -3,8 +3,8 @@
 %option extra-type="void*"
 %option prefix="ast_"
 %{
-#include "ast.h"
 #include "ast.tab.h"
+#include "ast.h"
 #define YY_NO_INPUT
 %}
 

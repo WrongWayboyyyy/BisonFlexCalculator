@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-
-#include "ast.h"
+#include "tree.h"
 
 unsigned int newnode (arena_t* arena, int nodetype, unsigned int l, unsigned int r) {
     unsigned int n = arena_allocate (arena, 1);
