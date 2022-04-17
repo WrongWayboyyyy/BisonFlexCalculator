@@ -1,12 +1,12 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-typedef struct arena_t arena_t;
-typedef struct node_t node_t;
+#include "arena.h"
 
-unsigned int newnode ( node_t* arena, int nodetype, 
+
+unsigned int newnode ( arena_t* arena, int nodetype, 
                        unsigned int l, unsigned int r );
-unsigned int newnum (node_t* arena, double d);
+unsigned int newnum (arena_t* arena, double d);
 
 double eval (node_t* );
 

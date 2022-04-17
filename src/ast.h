@@ -3,7 +3,7 @@
 
 #include "tree/tree.h"
 
-#define AST_STYPE node_t
+#define AST_STYPE unsigned int
 #define YYSTYPE AST_STYPE
 #define YYLTYPE AST_STYPE
 

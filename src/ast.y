@@ -1,4 +1,5 @@
 %code top {
+
 #include "ast.h"
 #include "ast.lex.h"
 
@@ -27,14 +28,35 @@ result: expr {
 }
 
 expr:
-  expr '+' expr { $$ = newnode (args, '+', $1, $3); }
-| expr '-' expr { $$ =  newnode (args, '-', $1, $3); }
-| expr '*' expr { $$ = newnode (args, '*', $1, $3); }
-| expr '/' expr { $$ = newnode (args, '/', $1, $3); }
-| '-' expr %prec UMINUS { $$ = newnode (args, '|', ARG, -1); }
-| '+' expr %prec UMINUS { $$ = newnode (args, 'M', ARG, -1); }
+  expr '+' expr { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ = newnode (extra, '+', $1, $3); 
+  }
+| expr '-' expr { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ =  newnode (extra, '-', $1, $3); 
+  }
+| expr '*' expr { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ =  newnode (extra, '*', $1, $3); 
+  }
+| expr '/' expr { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ =  newnode (extra, '/', $1, $3); 
+  }
+| '-' expr %prec UMINUS { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ = newnode (extra, '|', $1, -1); 
+  }
+| '+' expr %prec UMINUS { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ = newnode (extra, 'M', $1, -1); 
+  }
 | '(' expr ')' { $$ = $2; }
-| NUMBER { $$ = newnum (args, ARG); }
+| NUMBER { 
+    arena_t* extra = ast_get_extra (scanner);
+    $$ = newnum (extra, $1); 
+}
 
 
 %%

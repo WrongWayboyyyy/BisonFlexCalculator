@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "arena/arena.h"
+
 #include "ast.h"
 
 unsigned int newnode (calc_args_t *args, int nodetype, unsigned int l, unsigned int r) {
