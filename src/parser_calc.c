@@ -1,5 +1,5 @@
 #include "parser_calc.h"
-#include "parser.lex.h"
+#include "calc.lex.h"
 #include "parser.tab.h"
 
 YYSTYPE expr_parser_calc (abstract_expr_calc_t* abstract_expr_calc)
@@ -7,13 +7,13 @@ YYSTYPE expr_parser_calc (abstract_expr_calc_t* abstract_expr_calc)
   yyscan_t scanner;
   double result = 0;
 
-  if (parser_lex_init_extra (&result, &scanner))
+  if (calc_lex_init_extra (&result, &scanner))
     {
       fprintf (stderr, "Failed to init scanner\n");
       exit (EXIT_FAILURE);
     }
 
-  if (NULL == parser__scan_string (abstract_expr_calc->expr, scanner))
+  if (NULL == calc__scan_string (abstract_expr_calc->expr, scanner))
     {
       fprintf (stderr, "Failed to init lexer\n");
       exit (EXIT_FAILURE);

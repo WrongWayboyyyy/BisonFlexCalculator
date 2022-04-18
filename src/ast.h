@@ -12,5 +12,6 @@ typedef struct extra_t
 
 #define AST_STYPE long double
 #define YYSTYPE AST_STYPE
+#define ast_lex calc_lex
 
 #endif /* _AST_H */

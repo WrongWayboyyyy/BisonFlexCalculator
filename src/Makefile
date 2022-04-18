@@ -9,11 +9,12 @@ CC=cc
 	$(YACC) -d $<
 
 %.lex.h %.lex.c: %.l
-	$(LEX) --header-file=$*.lex.h -o $*.lex.c $<
+	$(LEX) --header-file=calc.lex.h -o $*.lex.c $<
 
-main: main.o parser.tab.o parser.lex.o ast.tab.o ast.lex.o jit.tab.o jit.lex.o parser_calc.o ast_calc.o jit_calc.o tree.o arena.o llvm.o
+main: main.o parser.tab.o calc.lex.o parser_calc.o ast.tab.o ast_calc.o tree.o arena.o
+# ast.tab.o ast.lex.o jit.tab.o jit.lex.o parser_calc.o ast_calc.o jit_calc.o tree.o arena.o llvm.o
 
-main.c: parser.lex.h parser.tab.h ast.lex.h ast.tab.h jit.lex.h jit.tab.h
+main.c: calc.lex.h parser.tab.h ast.tab.h
 
 PHONY: clean
 

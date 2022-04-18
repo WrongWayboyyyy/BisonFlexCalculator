@@ -1,7 +1,7 @@
 %option 8bit reentrant bison-bridge
 %option warn nounput never-interactive noyywrap
 %option extra-type="void*"
-%option prefix="parser_"
+%option prefix="calc_"
 %{
 #include "parser.h"
 #include "parser.tab.h"
