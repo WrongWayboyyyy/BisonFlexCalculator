@@ -5,8 +5,8 @@ import sys
 import numpy as np
 
 legend = []
-lower_y_lim = 1e9
-higher_y_lim = -1e9
+lower_y_lim = 1e-6
+higher_y_lim = 1e-7
 for index in range(1, len(sys.argv)):
     file_name = sys.argv[index]
     f = open(file_name, "r")
@@ -33,10 +33,7 @@ for index in range(1, len(sys.argv)):
     plt.plot(x_axis, y_axis)
     lower_y_lim = min(lower_y_lim, y_axis[0])
     higher_y_lim = max(higher_y_lim, y_axis[len(y_axis) - 1])
-plt.xlim(x_axis[0], x_axis[len(x_axis) - 1])
-plt.ylim(lower_y_lim / 10, higher_y_lim * 10)
 plt.rcParams.update({'font.size': 18})
-plt.yscale("log")
 plt.grid(True) 
 plt.legend(legend, loc="lower right")
 plt.show()

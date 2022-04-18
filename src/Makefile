@@ -1,41 +1,21 @@
-.PHONY: clean build run
+YACC=bison -Wall
+LEX=flex
+LDFLAGS+=-L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
+CFLAGS+=-I/opt/homebrew/opt/llvm/include -Wall  -O2 -g
 
-version=arena
-PREFIX = ..
-right_bound = 101
-step = 5
-iter = 1000000
-CSV_FOLDER = csv
-BUILD_DIR = build
-SRC_DIR = src
+CC=cc
 
+%.tab.h %.tab.c: %.y
+	$(YACC) -d $<
 
+%.lex.h %.lex.c: %.l
+	$(LEX) --header-file=$*.lex.h -o $*.lex.c $<
 
-ifeq (${version},arena)
-	EXTRA_VERSION_FLAG=_ARENA_VERSION_
-endif
-ifeq (${version},naive)
-	EXTRA_VERSION_FLAG=_NAIVE_VERSION_
-endif
+main: main.o parser.tab.o parser.lex.o ast.tab.o ast.lex.o jit.tab.o jit.lex.o parser_calc.o ast_calc.o jit_calc.o tree.o arena.o llvm.o
 
-LDFLAGS += -L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
-CFLAGS += -I/opt/homebrew/opt/llvm/include -o ${PREFIX}/calc.out -D${EXTRA_VERSION_FLAG}
+main.c: parser.lex.h parser.tab.h ast.lex.h ast.tab.h jit.lex.h jit.tab.h
+
+PHONY: clean
 
 clean:
-	@rm -f calc.tab.c
-	@rm -f calc.tab.h
-	@rm -f lex.yy.c
-
-build: calc.l calc.y ast.h
-	@bison -o calc.tab.c -d calc.y 
-	@flex -o lex.yy.c calc.l 
-	cc ${CFLAGS} ast.c calc.tab.c lex.yy.c arena/arena.c main.c ${LDFLAGS}
-
-run: build
-ifeq (${mode},benchmark)
-	python3 ${PREFIX}/test.py ${PREFIX}/calc.out ${PREFIX}/csv/${version}.csv ${right_bound} ${step} ${iter} ${version}
-else
-	${PREFIX}/calc.out ${mode} ${version}
-endif
-
-	
+	$(RM) *.tab.[ch] *.lex.[ch] *.o main
