@@ -16,17 +16,14 @@ def main():
     iter = sys.argv[5]
     ver = sys.argv[6]
 
-    f = open(out_path, "w")
-    f.write(f"{ver}\n")
-    f.close()
     for expr_len in range(1, right_bound, step):
         test_string = "+".join(['2'] * expr_len)
-        args = [exe_path, "benchmark", ver, test_string, iter]
+        args = [exe_path, ver, iter, test_string]
         t = time.monotonic()
         run(args)
         end_t = time.monotonic()
         f = open(out_path, "a")
-        f.write(f"{expr_len} {(end_t - t) / (int(iter))}\n")
+        f.write(f"{expr_len} {(end_t - t) / (int(iter[3:]))}\n")
         f.close()
         print(f" Step {expr_len} finished")
         
