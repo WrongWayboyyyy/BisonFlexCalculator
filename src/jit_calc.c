@@ -2,7 +2,7 @@
 
 #include "jit_calc.h"
 #include "jit.h"
-#include "jit.lex.h"
+#include "calc.lex.h"
 #include "jit.tab.h"
 
 long double expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
@@ -11,7 +11,6 @@ long double expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
   LLVMExecutionEngineRef engine = extra->engine;
   double (*f)(int) = (double (*)(int)) LLVMGetFunctionAddress (engine, "func");
   long double result = f(0);
-
   return result;
 }
 
@@ -38,13 +37,12 @@ int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
 
   yyscan_t scanner;
 
-  if (jit_lex_init_extra (extra, &scanner))
+  if (calc_lex_init_extra (extra, &scanner))
     {
       fprintf (stderr, "Failed to init scanner\n");
       exit (EXIT_FAILURE);
     }
-  // fprintf(stderr, "%s", abstract_expr_calc->expr);
-  if (NULL == jit__scan_string (abstract_expr_calc->expr, scanner))
+  if (NULL == calc__scan_string (abstract_expr_calc->expr, scanner))
     {
       fprintf (stderr, "Failed to init lexer\n");
       exit (EXIT_FAILURE);

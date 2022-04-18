@@ -48,7 +48,7 @@ int main (int argc, char * argv[])
       expr_ast_init (&abstract_expr_calc, argv[optind]);
       break;
     case CM_LLVM:
-      // expr_jit_init (&abstract_expr_calc, argv[optind]);
+      expr_jit_init (&abstract_expr_calc, argv[optind]);
       break;
     }
   
