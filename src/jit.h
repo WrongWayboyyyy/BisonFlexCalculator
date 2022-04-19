@@ -1,5 +1,5 @@
-#ifndef _AST_H_
-#define _AST_H_
+#ifndef _JIT_H_
+#define _JIT_H_
 
 #include "llvm.h"
 
@@ -10,12 +10,13 @@ typedef struct extra_t
   double* result;
 } extra_t;
 
-typedef struct jit_value_t {
+typedef union jit_value_t {
   LLVMValueRef rvalue;
   double val;
 } jit_value_t;
 
 #define JIT_STYPE jit_value_t
 #define YYSTYPE JIT_STYPE
+#define jit_lex calc_lex
 
-#endif /* _AST_H */
+#endif /* _JIT_H */

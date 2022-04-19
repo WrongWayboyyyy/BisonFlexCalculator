@@ -1,6 +1,6 @@
 %code top {
 #include "parser.h"
-#include "parser.lex.h"
+#include "calc.lex.h"
 static void parser_error (void* scanner, char* error) {}
 }
 
@@ -22,7 +22,7 @@ static void parser_error (void* scanner, char* error) {}
 
 result: expr 
 {
-  PARSER_STYPE* result = parser_get_extra (scanner);
+  PARSER_STYPE* result = calc_get_extra (scanner);
   *result = $1;
 }
 

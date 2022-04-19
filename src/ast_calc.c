@@ -2,7 +2,7 @@
 
 #include "ast_calc.h"
 #include "ast.h"
-#include "ast.lex.h"
+#include "calc.lex.h"
 #include "ast.tab.h"
 #include "tree.h"
 
@@ -38,13 +38,13 @@ int expr_ast_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
   abstract_expr_calc->destroy = expr_ast_destroy;
 
   yyscan_t scanner;
-  if (ast_lex_init_extra (extra, &scanner))
+  if (calc_lex_init_extra (extra, &scanner))
     {
       fprintf (stderr, "Failed to init scanner\n");
       exit (EXIT_FAILURE);
     }
 
-  if (NULL == ast__scan_string (abstract_expr_calc->expr, scanner))
+  if (NULL == calc__scan_string (abstract_expr_calc->expr, scanner))
     {
       fprintf (stderr, "Failed to init lexer\n");
       exit (EXIT_FAILURE);
