@@ -3,7 +3,7 @@
 
 #include "llvm.h"
 
-void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
+int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
                , LLVMBuilderRef* builder, LLVMValueRef* value )
 {
 
@@ -27,22 +27,21 @@ void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
   char* error = NULL;
   if (LLVMCreateExecutionEngineForModule (&(*engine), *module, &error) != 0) 
     {
-      printf ("Failed to create execution engine\n");
-      abort ();
+      fprintf (stderr, "Failed to create execution engine\n");
+      return (EXIT_FAILURE);
     }
-
+  return (EXIT_SUCCESS);
 }
 
-void llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) 
+int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) 
 {
   char* error = NULL;
-  LLVMVerifyModule (*module, LLVMAbortProcessAction, &error);
-  LLVMDisposeMessage (error);
-
-  if (error) 
+  int rc = LLVMVerifyModule (*module, LLVMAbortProcessAction, &error);
+  if (rc)
     {
-      fprintf (stderr, "error: %s\n", error);
+      fprintf (stderr, "Failed to verify module: %s\n", error);
       LLVMDisposeMessage (error);
-      exit (EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
+  return (EXIT_SUCCESS);
 }

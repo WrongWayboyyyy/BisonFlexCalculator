@@ -38,26 +38,34 @@ int main (int argc, char * argv[])
           repeat = atoi (optarg);
           break;
       }
-
+  int rc;
   switch (calc_mode)
     {
     case CM_PARSE:
-      expr_parser_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_parser_init (&abstract_expr_calc, argv[optind]);
       break;
     case CM_AST:
-      expr_ast_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_ast_init (&abstract_expr_calc, argv[optind]);
       break;
     case CM_LLVM:
-      expr_jit_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_jit_init (&abstract_expr_calc, argv[optind]);
       break;
     }
-  
+  if (rc)
+    {
+      fprintf(stderr, "Failed to init calculator");
+      return (EXIT_FAILURE);
+    }
   int i;
   double sum = 0;
   for (i = 0; i < repeat; ++i)
     {
-      double result = abstract_expr_calc.calc (&abstract_expr_calc);
-      sum += result;
+      if (abstract_expr_calc.calc (&abstract_expr_calc))
+        {
+          fprintf (stderr, "An error caught during a calculation");
+          return (EXIT_FAILURE);
+        }
+      sum += abstract_expr_calc.result;
     }
 
   printf ("%s = %g\n", argv[optind], sum);

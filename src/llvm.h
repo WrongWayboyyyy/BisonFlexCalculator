@@ -7,10 +7,10 @@
 #include <llvm-c/Analysis.h>
 #include <llvm-c/BitWriter.h>
 
-void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
+int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
                , LLVMBuilderRef* builder, LLVMValueRef* value );
 
-void llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine);
+int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine);
 
 
 #endif /* _LLVM_H_ */

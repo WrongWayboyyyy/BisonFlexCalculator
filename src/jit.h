@@ -7,6 +7,7 @@ typedef struct extra_t
 {
   LLVMBuilderRef builder;
   LLVMExecutionEngineRef engine;
+  LLVMValueRef value;
   double* result;
 } extra_t;
 
@@ -19,4 +20,4 @@ typedef union jit_value_t {
 #define YYSTYPE JIT_STYPE
 #define jit_lex calc_lex
 
-#endif /* _JIT_H */
+#endif /* _JIT_H_ */
