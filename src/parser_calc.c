@@ -1,7 +1,8 @@
+#include <stdlib.h>
+
 #include "parser_calc.h"
 #include "calc.lex.h"
 #include "parser.tab.h"
-#include <stdlib.h>
 
 int expr_parser_calc (abstract_expr_calc_t* abstract_expr_calc)
 {

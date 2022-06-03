@@ -32,9 +32,7 @@ expr:
 | expr '*' expr { $$ = $1 * $3; }
 | expr '/' expr { $$ = $1 / $3; }
 | '-' expr %prec UMINUS { $$ = -$2; }
-| '+' expr %prec UMINUS { $$ = $2; }
 | '(' expr ')' { $$ = $2; }
 | NUMBER { $$ = $1; }
-
 
 %%

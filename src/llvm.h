@@ -8,7 +8,7 @@
 #include <llvm-c/BitWriter.h>
 
 int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
-               , LLVMBuilderRef* builder, LLVMValueRef* value );
+              , LLVMBuilderRef* builder, LLVMValueRef* value );
 
 int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine);
 

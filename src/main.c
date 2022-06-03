@@ -15,7 +15,7 @@ typedef enum
   CM_LLVM,
 } calc_mode_t;
 
-int main (int argc, char * argv[])
+int main (int argc, char* argv[])
 {
   abstract_expr_calc_t abstract_expr_calc;
   calc_mode_t calc_mode = CM_PARSE;
@@ -53,7 +53,7 @@ int main (int argc, char * argv[])
     }
   if (rc)
     {
-      fprintf(stderr, "Failed to init calculator");
+      fprintf (stderr, "Failed to init calculator");
       return (EXIT_FAILURE);
     }
   int i;

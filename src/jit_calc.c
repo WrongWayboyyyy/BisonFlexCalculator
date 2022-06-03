@@ -10,8 +10,9 @@ int expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
   extra_t* extra = abstract_expr_calc->extra;
   LLVMExecutionEngineRef engine = extra->engine;
   
-  double (*f)(int) = (double (*)(int)) LLVMGetFunctionAddress (engine, "func");
-  abstract_expr_calc->result = f(0);
+  VALUE_TYPE (*f)(VALUE_TYPE) = (VALUE_TYPE (*)(VALUE_TYPE)) 
+      LLVMGetFunctionAddress (engine, "func");
+  abstract_expr_calc->result = f(0.0);
   return (EXIT_SUCCESS);
 }
 

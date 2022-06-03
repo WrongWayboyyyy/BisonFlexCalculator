@@ -4,7 +4,7 @@
 #include "llvm.h"
 
 int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
-               , LLVMBuilderRef* builder, LLVMValueRef* value )
+              , LLVMBuilderRef* builder, LLVMValueRef* value )
 {
 
   *module = LLVMModuleCreateWithName ("calc");

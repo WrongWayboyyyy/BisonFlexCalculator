@@ -2,11 +2,12 @@
 #define _AST_H_
 
 #include "tree.h"
+#include "value.h"
 
 typedef struct arena_t extra_t;
 
-#define AST_STYPE long double
+#define AST_STYPE VALUE_TYPE
 #define YYSTYPE AST_STYPE
 #define ast_lex calc_lex
 
-#endif /* _AST_H */
+#endif /* _AST_H_ */

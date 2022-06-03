@@ -15,7 +15,7 @@ main: main.o calc.lex.o parser.tab.o parser_calc.o ast.tab.o ast_calc.o jit.tab.
 
 main.c: calc.lex.h parser.tab.h ast.tab.h jit.tab.h
 
-PHONY: clean
+.PHONY: clean
 
 clean:
 	$(RM) *.tab.[ch] *.lex.[ch] *.o main

@@ -35,9 +35,9 @@ unsigned int ast_alloc_num (arena_t* arena, double d)
   return index;
 }
 
-double ast_eval (arena_t* arena) 
+VALUE_TYPE ast_eval (arena_t* arena) 
 {
-  double results[arena->allocated];
+  VALUE_TYPE results[arena->allocated];
     
   for (int i = 0; i < arena->allocated; ++i) 
     {
