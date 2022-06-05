@@ -9,12 +9,12 @@ typedef struct extra_t
   LLVMBuilderRef builder;
   LLVMExecutionEngineRef engine;
   LLVMValueRef value;
-  VALUE_TYPE* result;
+  value_type_t* result;
 } extra_t;
 
 typedef union jit_value_t {
   LLVMValueRef rvalue;
-  VALUE_TYPE val;
+  value_type_t val;
 } jit_value_t;
 
 #define JIT_STYPE jit_value_t

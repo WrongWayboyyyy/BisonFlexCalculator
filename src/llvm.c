@@ -10,8 +10,8 @@ int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
   *module = LLVMModuleCreateWithName ("calc");
 
   LLVMTypeRef param_types[] = { LLVMDoubleType () };
-  LLVMTypeRef ret_type = LLVMFunctionType (LLVMDoubleType ()
-                                          , param_types, 1, 0);
+  LLVMTypeRef ret_type = LLVMFunctionType ( LLVMDoubleType ()
+                                          , param_types, 1, 0 );
   LLVMValueRef func = LLVMAddFunction (*module, "func", ret_type);
 
   LLVMBasicBlockRef entry = LLVMAppendBasicBlock (func, "entry");

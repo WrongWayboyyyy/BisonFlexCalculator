@@ -9,7 +9,7 @@ typedef struct abstract_expr_calc_t
   void* extra;
   int (*calc) (struct abstract_expr_calc_t* );
   void (*destroy) (struct abstract_expr_calc_t* );
-  VALUE_TYPE result;
+  value_type_t result;
 } abstract_expr_calc_t;
 
 #endif /* _ABSTRACT_CALC_H_ */

@@ -18,12 +18,13 @@ def main():
 
     for expr_len in range(1, right_bound, step):
         test_string = "+".join(['2'] * expr_len)
-        args = [exe_path, ver, iter, test_string]
+        args = [exe_path, ver, "-r " + iter, test_string]
+        print(args)
         t = time.monotonic()
         run(args)
         end_t = time.monotonic()
         f = open(out_path, "a")
-        f.write(f"{expr_len} {(end_t - t) / (int(iter[3:]))}\n")
+        f.write(f"{expr_len} {(end_t - t) / (int(iter))}\n")
         f.close()
         print(f" Step {expr_len} finished")
         

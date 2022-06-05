@@ -6,7 +6,7 @@
 
 typedef struct arena_t extra_t;
 
-#define AST_STYPE VALUE_TYPE
+#define AST_STYPE value_type_t
 #define YYSTYPE AST_STYPE
 #define ast_lex calc_lex
 
