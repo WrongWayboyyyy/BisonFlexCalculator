@@ -1,7 +1,7 @@
 YACC=bison -Wall -Werror
 LEX=flex
 LDFLAGS+=-L/opt/homebrew/opt/llvm/lib -lpthread -lLLVM
-CFLAGS+=-I/opt/homebrew/opt/llvm/include -Wall  -Werror -O2 -g
+CFLAGS+=-I/opt/homebrew/opt/llvm/include -Werror -O2 -g
 
 CC=cc
 

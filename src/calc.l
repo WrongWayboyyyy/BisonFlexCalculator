@@ -24,8 +24,8 @@ EXP ([Ee][-+]?[0-9]+)
     *yylval = strtold (yytext, NULL); 
     return NUMBER; 
 }
-"//".*
-[ \t]  { }
-.      { printf("Mystery character %s\n", yytext); }
+. {
+    return yytext[0];
+}
 
 %%

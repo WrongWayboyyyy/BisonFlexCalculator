@@ -10,7 +10,8 @@ typedef struct extra_t
   LLVMExecutionEngineRef engine;
   LLVMModuleRef module;
   LLVMValueRef value;
-  value_type_t* result;
+  value_type_t x_value;
+  
 } extra_t;
 
 typedef union jit_value_t {

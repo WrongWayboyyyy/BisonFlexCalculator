@@ -5,45 +5,47 @@
 #include "calc.lex.h"
 #include "jit.tab.h"
 
-int expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
+int expr_jit_calc (abstract_expr_calc_t* calc)
 {
-  extra_t* extra = abstract_expr_calc->extra;
+  extra_t* extra = calc->extra;
   LLVMExecutionEngineRef engine = extra->engine;
   
   value_type_t (*f)(value_type_t) = (value_type_t (*)(value_type_t)) 
       LLVMGetFunctionAddress (engine, "func");
-  abstract_expr_calc->result = f(0.0);
+  calc->result = f (extra->x_value);
   return (EXIT_SUCCESS);
 }
 
-void expr_jit_destroy (abstract_expr_calc_t* abstract_expr_calc)
+void expr_jit_destroy (abstract_expr_calc_t* calc)
 {
-  extra_t* extra = abstract_expr_calc->extra;
+  extra_t* extra = calc->extra;
   llvm_destroy (&extra->module);
-  free (abstract_expr_calc->extra);
+  free (calc->extra);
   return;
 }
 
-int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
+int expr_jit_init (abstract_expr_calc_t* calc, value_type_t x, char* expr)
 {
-  abstract_expr_calc->expr = expr;
+  calc->expr = expr;
   extra_t* extra = malloc (sizeof (extra_t));
+  extra->x_value = x;
   if (!extra) 
     {
       fprintf (stderr, "Failed to allocate extra\n");
       return (EXIT_FAILURE);
     }
 
-  int rc = llvm_init (&extra->module, &extra->engine, &extra->builder, &extra->value);
+  int rc = llvm_init ( &extra->module, &extra->engine
+                     , &extra->builder, &extra->value );
 
   if (rc)
     {
       return (EXIT_FAILURE);
     }
 
-  abstract_expr_calc->extra = extra;
-  abstract_expr_calc->calc = expr_jit_calc;
-  abstract_expr_calc->destroy = expr_jit_destroy;
+  calc->extra = extra;
+  calc->calc = expr_jit_calc;
+  calc->destroy = expr_jit_destroy;
 
   yyscan_t scanner;
 
@@ -52,7 +54,7 @@ int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
       fprintf (stderr, "Failed to init scanner\n");
       return (EXIT_FAILURE);
     }
-  if (NULL == calc__scan_string (abstract_expr_calc->expr, scanner))
+  if (NULL == calc__scan_string (calc->expr, scanner))
     {
       fprintf (stderr, "Failed to init lexer\n");
       return (EXIT_FAILURE);

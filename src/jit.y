@@ -66,5 +66,10 @@ expr:
   { 
     $$.rvalue = LLVMConstReal (LLVMDoubleType (), $1.val);
   }
+| 'x' 
+  {
+    extra_t* extra = calc_get_extra (scanner);
+    $$.rvalue = extra->value;
+  }
 
 %%

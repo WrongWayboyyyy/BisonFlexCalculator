@@ -21,8 +21,9 @@ int main (int argc, char* argv[])
   calc_mode_t calc_mode = CM_PARSE;
   int repeat = 1;
   int op;
+  value_type_t x_value;
   
-  while ((op = getopt (argc, argv, "palr:")) != -1)
+  while ((op = getopt (argc, argv, "palr:x:")) != -1)
     switch (op)
       {
         case 'p':
@@ -37,18 +38,22 @@ int main (int argc, char* argv[])
         case 'r':
           repeat = atoi (optarg);
           break;
+        case 'x':
+          // TODO: Make parse function universal for each value_type_t
+          x_value = atoi (optarg);
+          break;
       }
   int rc;
   switch (calc_mode)
     {
     case CM_PARSE:
-      rc = expr_parser_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_parser_init (&abstract_expr_calc, x_value, argv[optind]);
       break;
     case CM_AST:
-      rc = expr_ast_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_ast_init (&abstract_expr_calc, x_value, argv[optind]);
       break;
     case CM_LLVM:
-      rc = expr_jit_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_jit_init (&abstract_expr_calc, x_value, argv[optind]);
       break;
     }
   if (rc)

@@ -1,3 +1,4 @@
+from cgi import test
 import subprocess as sb
 import time
 import sys
@@ -17,7 +18,9 @@ def main():
     ver = sys.argv[6]
 
     for expr_len in range(1, right_bound, step):
-        test_string = "+".join(['2'] * expr_len)
+        test_string = "x";
+        for i in range(1, expr_len):
+            test_string += f"*(x+{i})";
         args = [exe_path, ver, "-r " + iter, test_string]
         print(args)
         t = time.monotonic()

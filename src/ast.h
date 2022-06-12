@@ -4,7 +4,10 @@
 #include "tree.h"
 #include "value.h"
 
-typedef struct arena_t extra_t;
+typedef struct ast_extra_t {
+  arena_t* arena;
+  value_type_t x_value;
+} extra_t;
 
 #define AST_STYPE value_type_t
 #define YYSTYPE AST_STYPE
