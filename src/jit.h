@@ -8,6 +8,7 @@ typedef struct extra_t
 {
   LLVMBuilderRef builder;
   LLVMExecutionEngineRef engine;
+  LLVMModuleRef module;
   LLVMValueRef value;
   value_type_t* result;
 } extra_t;

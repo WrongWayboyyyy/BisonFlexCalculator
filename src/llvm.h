@@ -12,5 +12,6 @@ int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
 
 int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine);
 
+int llvm_destroy (LLVMModuleRef* module);
 
 #endif /* _LLVM_H_ */

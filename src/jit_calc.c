@@ -18,6 +18,9 @@ int expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
 
 void expr_jit_destroy (abstract_expr_calc_t* abstract_expr_calc)
 {
+  extra_t* extra = abstract_expr_calc->extra;
+  llvm_destroy (&extra->module);
+  free (abstract_expr_calc->extra);
   return;
 }
 
@@ -30,15 +33,13 @@ int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
       fprintf (stderr, "Failed to allocate extra\n");
       return (EXIT_FAILURE);
     }
-  LLVMModuleRef module;
 
-  int rc = llvm_init (&module, &extra->engine, &extra->builder, &extra->value);
+  int rc = llvm_init (&extra->module, &extra->engine, &extra->builder, &extra->value);
 
   if (rc)
     {
       return (EXIT_FAILURE);
     }
-
 
   abstract_expr_calc->extra = extra;
   abstract_expr_calc->calc = expr_jit_calc;
@@ -55,7 +56,7 @@ int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
     {
       fprintf (stderr, "Failed to init lexer\n");
       return (EXIT_FAILURE);
-    }    
+    }
 
   if (jit_parse (scanner))
     {
@@ -63,7 +64,7 @@ int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
       return (EXIT_FAILURE);
     }
 
-  rc = llvm_verify (&module, &extra->engine);
+  rc = llvm_verify (&extra->module, &extra->engine);  
 
   if (rc)
     {
