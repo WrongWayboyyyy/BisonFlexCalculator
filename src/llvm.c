@@ -46,8 +46,9 @@ int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine)
   return (EXIT_SUCCESS);
 }
 
-int llvm_destroy (LLVMModuleRef* module)
+int llvm_destroy (LLVMModuleRef* module, LLVMBuilderRef* builder)
 {
+  LLVMDisposeBuilder(*builder);
   LLVMDisposeModule (*module);
   return (EXIT_SUCCESS);
 }

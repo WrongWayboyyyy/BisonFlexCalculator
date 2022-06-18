@@ -67,7 +67,7 @@ expr:
 | 'x'
   {
     extra_t* extra = calc_get_extra (scanner);
-    $$ = ast_alloc_num (extra->arena, extra->x_value);
+    $$ = ast_alloc_x (extra->arena);
   }
 
 %%

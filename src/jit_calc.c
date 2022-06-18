@@ -12,6 +12,7 @@ int expr_jit_calc (abstract_expr_calc_t* calc)
   
   value_type_t (*f)(value_type_t) = (value_type_t (*)(value_type_t)) 
       LLVMGetFunctionAddress (engine, "func");
+
   calc->result = f (extra->x_value);
   return (EXIT_SUCCESS);
 }
@@ -19,7 +20,7 @@ int expr_jit_calc (abstract_expr_calc_t* calc)
 void expr_jit_destroy (abstract_expr_calc_t* calc)
 {
   extra_t* extra = calc->extra;
-  llvm_destroy (&extra->module);
+  llvm_destroy (&extra->module, &extra->builder); 
   free (calc->extra);
   return;
 }

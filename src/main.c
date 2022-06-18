@@ -23,7 +23,7 @@ int main (int argc, char* argv[])
   int op;
   value_type_t x_value;
   
-  while ((op = getopt (argc, argv, "palr:x:")) != -1)
+  while ((op = getopt (argc, argv, "pajr:x:")) != -1)
     switch (op)
       {
         case 'p':
@@ -32,7 +32,7 @@ int main (int argc, char* argv[])
         case 'a':
           calc_mode = CM_AST;
           break;
-        case 'l':
+        case 'j':
           calc_mode = CM_LLVM;
           break;
         case 'r':

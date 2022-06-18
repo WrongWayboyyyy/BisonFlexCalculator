@@ -63,6 +63,7 @@ value_type_t ast_eval (arena_t* arena, value_type_t x_value)
             break;
           case 'X':
             results[i] = x_value;
+            break;
           case '+' : 
             results[i] = results[node->op.l] + results[node->op.r];
             break;
@@ -91,6 +92,8 @@ value_type_t ast_eval (arena_t* arena, value_type_t x_value)
         fprintf (stderr, "Internal AST error: No allocated memory");
         exit (EXIT_FAILURE);
       }
+
+      printf("%f", results[arena->allocated - 1]);
 
     return results[arena->allocated - 1];
 }
