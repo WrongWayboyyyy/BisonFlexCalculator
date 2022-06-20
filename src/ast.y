@@ -16,8 +16,6 @@ static void ast_error (void* scanner, char* error) {}
 %left '*' '/'
 %precedence UMINUS
 
-%defines
-
 %start result
 
 %% 

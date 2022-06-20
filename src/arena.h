@@ -5,13 +5,13 @@
 
 #include "node.h"
 
-#define DEFAULT_ARENA_SIZE 16
+#define DEFAULT_ARENA_CAPACITY 16
 #define MULTIPLY_FACTOR 2
 
 typedef struct arena_t 
 {
   struct node_t* arena;
-  unsigned int size;
+  unsigned int capacity;
   unsigned int allocated;
 } arena_t;
 

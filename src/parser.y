@@ -14,8 +14,6 @@ static void parser_error (void* scanner, char* error) {}
 %left '*' '/'
 %precedence UMINUS
 
-%defines
-
 %start result
 
 %% 

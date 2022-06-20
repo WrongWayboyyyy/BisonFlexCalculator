@@ -8,12 +8,7 @@
 int expr_jit_calc (abstract_expr_calc_t* calc)
 {
   extra_t* extra = calc->extra;
-  LLVMExecutionEngineRef engine = extra->engine;
-  
-  value_type_t (*f)(value_type_t) = (value_type_t (*)(value_type_t)) 
-      LLVMGetFunctionAddress (engine, "func");
-
-  calc->result = f (extra->x_value);
+  calc->result = extra->f (extra->x_value);
   return (EXIT_SUCCESS);
 }
 
@@ -73,6 +68,9 @@ int expr_jit_init (abstract_expr_calc_t* calc, value_type_t x, char* expr)
     {
       return (EXIT_FAILURE);
     }
+
+  extra->f = (value_type_t (*)(value_type_t)) 
+      LLVMGetFunctionAddress (extra->engine, "func");
 
   return (EXIT_SUCCESS);
 }

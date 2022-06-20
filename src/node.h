@@ -1,6 +1,8 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
+#include "value.h"
+
 typedef struct bin_op_t 
 {
   unsigned int l;
@@ -11,7 +13,7 @@ typedef struct node_t
 {
   union 
   {
-    double val;
+    value_type_t val;
     bin_op_t op;
   };
   int nodetype;

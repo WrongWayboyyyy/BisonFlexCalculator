@@ -93,7 +93,5 @@ value_type_t ast_eval (arena_t* arena, value_type_t x_value)
         exit (EXIT_FAILURE);
       }
 
-      printf("%f", results[arena->allocated - 1]);
-
     return results[arena->allocated - 1];
 }
