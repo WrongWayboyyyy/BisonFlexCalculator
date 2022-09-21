@@ -11,3 +11,4 @@ compile_commands.json
 *.csv
 *.DS_Store
 *.pdf
+*.vscode
