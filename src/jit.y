@@ -33,7 +33,6 @@ expr:
   { 
     extra_t* extra = calc_get_extra (scanner);
     $$.rvalue = LLVMBuildFAdd (extra->builder, $1.rvalue, $3.rvalue, "add");
-
   }
 | expr '-' expr 
   { 

@@ -33,7 +33,7 @@ int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
   return (EXIT_SUCCESS);
 }
 
-int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) 
+int llvm_verify (LLVMModuleRef* module) 
 {
   char* error = NULL;
   int rc = LLVMVerifyModule (*module, LLVMAbortProcessAction, &error);

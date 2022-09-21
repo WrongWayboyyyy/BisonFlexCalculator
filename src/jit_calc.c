@@ -62,7 +62,7 @@ int expr_jit_init (abstract_expr_calc_t* calc, value_type_t x, char* expr)
       return (EXIT_FAILURE);
     }
 
-  rc = llvm_verify (&extra->module, &extra->engine);  
+  rc = llvm_verify (&extra->module);  
 
   if (rc)
     {
