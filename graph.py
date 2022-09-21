@@ -27,9 +27,9 @@ for index in range(1, len(sys.argv)):
         y_axis.append(h)
     plt.xlabel("Длина выражения", size = 22)
     plt.ylabel("Время", size = 22)
-    p = np.polyfit(x_axis, y_axis, 1)
-    for i in range(len(x_axis)):
-       y_axis[i] = p[0] * x_axis[i] + p[1]
+    # p = np.polyfit(x_axis, y_axis, 1)
+    # for i in range(len(x_axis)):
+    #    y_axis[i] = p[0] * x_axis[i] + p[1]
     plt.plot(x_axis, y_axis)
     lower_y_lim = min(lower_y_lim, y_axis[0])
     higher_y_lim = max(higher_y_lim, y_axis[len(y_axis) - 1])

@@ -11,6 +11,7 @@ typedef struct extra_t
   LLVMModuleRef module;
   LLVMValueRef value;
   value_type_t x_value;
+  value_type_t (*f)(value_type_t);
   
 } extra_t;
 

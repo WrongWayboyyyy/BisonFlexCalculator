@@ -14,8 +14,6 @@ static void parser_error (void* scanner, char* error) {}
 %left '*' '/'
 %precedence UMINUS
 
-%defines
-
 %start result
 
 %% 
@@ -36,7 +34,7 @@ expr:
 | NUMBER { $$ = $1; }
 | 'x'
   {
-      extra_t* extra = calc_get_extra (scanner);           \
+      extra_t* extra = calc_get_extra (scanner);
       $$ = extra->x_value;
   }
 

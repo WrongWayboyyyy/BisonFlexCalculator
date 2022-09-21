@@ -10,7 +10,7 @@
 int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
               , LLVMBuilderRef* builder, LLVMValueRef* value );
 
-int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine);
+int llvm_verify (LLVMModuleRef* module);
 
 int llvm_destroy (LLVMModuleRef* module, LLVMBuilderRef* builder);
 

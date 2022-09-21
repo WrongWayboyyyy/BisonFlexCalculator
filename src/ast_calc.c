@@ -17,6 +17,8 @@ void expr_ast_destroy (abstract_expr_calc_t* calc)
 {
   arena_t* arena = calc->extra;
   arena_free (arena);
+  free (calc->extra);
+
   return;
 }
 
