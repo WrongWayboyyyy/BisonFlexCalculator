@@ -68,7 +68,7 @@ int expr_jit_init (abstract_expr_calc_t* calc, value_type_t x, char* expr)
     {
       return (EXIT_FAILURE);
     }
-
+    
   extra->f = (value_type_t (*)(value_type_t)) 
       LLVMGetFunctionAddress (extra->engine, "func");
 
