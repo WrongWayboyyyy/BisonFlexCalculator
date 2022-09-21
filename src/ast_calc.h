@@ -3,10 +3,10 @@
 
 #include "abstract_calc.h"
 
-long double expr_ast_calc (abstract_expr_calc_t* abstract_expr_calc);
+int expr_ast_calc (abstract_expr_calc_t* calc);
 
-void expr_ast_destroy (abstract_expr_calc_t* abstract_expr_calc);
+void expr_ast_destroy (abstract_expr_calc_t* calc);
 
-int expr_ast_init (abstract_expr_calc_t* abstract_expr_calc, char* expr);
+int expr_ast_init (abstract_expr_calc_t* calc, value_type_t x_value, char* expr);
 
 #endif /* _AST_CALC_H_ */

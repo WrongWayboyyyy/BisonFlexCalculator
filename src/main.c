@@ -15,14 +15,15 @@ typedef enum
   CM_LLVM,
 } calc_mode_t;
 
-int main (int argc, char * argv[])
+int main (int argc, char* argv[])
 {
   abstract_expr_calc_t abstract_expr_calc;
   calc_mode_t calc_mode = CM_PARSE;
   int repeat = 1;
   int op;
+  value_type_t x_value;
   
-  while ((op = getopt (argc, argv, "palr:")) != -1)
+  while ((op = getopt (argc, argv, "pajr:x:")) != -1)
     switch (op)
       {
         case 'p':
@@ -31,33 +32,45 @@ int main (int argc, char * argv[])
         case 'a':
           calc_mode = CM_AST;
           break;
-        case 'l':
+        case 'j':
           calc_mode = CM_LLVM;
           break;
         case 'r':
           repeat = atoi (optarg);
           break;
+        case 'x':
+          // TODO: Make parse function universal for each value_type_t
+          x_value = atoi (optarg);
+          break;
       }
-
+  int rc;
   switch (calc_mode)
     {
     case CM_PARSE:
-      expr_parser_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_parser_init (&abstract_expr_calc, x_value, argv[optind]);
       break;
     case CM_AST:
-      expr_ast_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_ast_init (&abstract_expr_calc, x_value, argv[optind]);
       break;
     case CM_LLVM:
-      expr_jit_init (&abstract_expr_calc, argv[optind]);
+      rc = expr_jit_init (&abstract_expr_calc, x_value, argv[optind]);
       break;
     }
-  
+  if (rc)
+    {
+      fprintf (stderr, "Failed to init calculator");
+      return (EXIT_FAILURE);
+    }
   int i;
   double sum = 0;
   for (i = 0; i < repeat; ++i)
     {
-      double result = abstract_expr_calc.calc (&abstract_expr_calc);
-      sum += result;
+      if (abstract_expr_calc.calc (&abstract_expr_calc))
+        {
+          fprintf (stderr, "An error caught during a calculation");
+          return (EXIT_FAILURE);
+        }
+      sum += abstract_expr_calc.result;
     }
 
   printf ("%s = %g\n", argv[optind], sum);

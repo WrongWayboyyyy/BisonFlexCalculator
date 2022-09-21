@@ -5,54 +5,75 @@
 #include "calc.lex.h"
 #include "jit.tab.h"
 
-long double expr_jit_calc (abstract_expr_calc_t* abstract_expr_calc)
+int expr_jit_calc (abstract_expr_calc_t* calc)
 {
-  extra_t* extra = abstract_expr_calc->extra;
+  extra_t* extra = calc->extra;
   LLVMExecutionEngineRef engine = extra->engine;
-  double (*f)(int) = (double (*)(int)) LLVMGetFunctionAddress (engine, "func");
-  long double result = f(0);
-  return result;
+  
+  value_type_t (*f)(value_type_t) = (value_type_t (*)(value_type_t)) 
+      LLVMGetFunctionAddress (engine, "func");
+
+  calc->result = f (extra->x_value);
+  return (EXIT_SUCCESS);
 }
 
-void expr_jit_destroy (abstract_expr_calc_t* abstract_expr_calc)
+void expr_jit_destroy (abstract_expr_calc_t* calc)
 {
+  extra_t* extra = calc->extra;
+  llvm_destroy (&extra->module, &extra->builder); 
+  free (calc->extra);
   return;
 }
 
-int expr_jit_init (abstract_expr_calc_t* abstract_expr_calc, char* expr)
+int expr_jit_init (abstract_expr_calc_t* calc, value_type_t x, char* expr)
 {
-  abstract_expr_calc->expr = expr;
+  calc->expr = expr;
   extra_t* extra = malloc (sizeof (extra_t));
-  LLVMModuleRef module;
-  LLVMExecutionEngineRef engine;
-  LLVMBuilderRef builder;
-  LLVMValueRef value;
+  extra->x_value = x;
+  if (!extra) 
+    {
+      fprintf (stderr, "Failed to allocate extra\n");
+      return (EXIT_FAILURE);
+    }
 
-  llvm_init (&module, &engine, &builder, &value);
-  extra->builder = builder;
-  extra->engine = engine;
-  abstract_expr_calc->extra = extra;
-  abstract_expr_calc->calc = expr_jit_calc;
-  abstract_expr_calc->destroy = expr_jit_destroy;
+  int rc = llvm_init ( &extra->module, &extra->engine
+                     , &extra->builder, &extra->value );
+
+  if (rc)
+    {
+      return (EXIT_FAILURE);
+    }
+
+  calc->extra = extra;
+  calc->calc = expr_jit_calc;
+  calc->destroy = expr_jit_destroy;
 
   yyscan_t scanner;
 
   if (calc_lex_init_extra (extra, &scanner))
     {
       fprintf (stderr, "Failed to init scanner\n");
-      exit (EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
-  if (NULL == calc__scan_string (abstract_expr_calc->expr, scanner))
+  if (NULL == calc__scan_string (calc->expr, scanner))
     {
       fprintf (stderr, "Failed to init lexer\n");
-      exit (EXIT_FAILURE);
-    }    
+      return (EXIT_FAILURE);
+    }
 
   if (jit_parse (scanner))
     {
       fprintf (stderr, "Failed to parse\n");
-      exit (EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
+
+  rc = llvm_verify (&extra->module, &extra->engine);  
+
+  if (rc)
+    {
+      return (EXIT_FAILURE);
+    }
+
   return (EXIT_SUCCESS);
 }
 

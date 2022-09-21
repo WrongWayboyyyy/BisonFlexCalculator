@@ -3,15 +3,15 @@
 
 #include "llvm.h"
 
-void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
-               , LLVMBuilderRef* builder, LLVMValueRef* value )
+int llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
+              , LLVMBuilderRef* builder, LLVMValueRef* value )
 {
 
   *module = LLVMModuleCreateWithName ("calc");
 
   LLVMTypeRef param_types[] = { LLVMDoubleType () };
-  LLVMTypeRef ret_type = LLVMFunctionType (LLVMDoubleType ()
-                                          , param_types, 1, 0);
+  LLVMTypeRef ret_type = LLVMFunctionType ( LLVMDoubleType ()
+                                          , param_types, 1, 0 );
   LLVMValueRef func = LLVMAddFunction (*module, "func", ret_type);
 
   LLVMBasicBlockRef entry = LLVMAppendBasicBlock (func, "entry");
@@ -27,22 +27,28 @@ void llvm_init ( LLVMModuleRef* module, LLVMExecutionEngineRef* engine
   char* error = NULL;
   if (LLVMCreateExecutionEngineForModule (&(*engine), *module, &error) != 0) 
     {
-      printf ("Failed to create execution engine\n");
-      abort ();
+      fprintf (stderr, "Failed to create execution engine\n");
+      return (EXIT_FAILURE);
     }
-
+  return (EXIT_SUCCESS);
 }
 
-void llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) 
+int llvm_verify (LLVMModuleRef* module, LLVMExecutionEngineRef* engine) 
 {
   char* error = NULL;
-  LLVMVerifyModule (*module, LLVMAbortProcessAction, &error);
-  LLVMDisposeMessage (error);
-
-  if (error) 
+  int rc = LLVMVerifyModule (*module, LLVMAbortProcessAction, &error);
+  if (rc)
     {
-      fprintf (stderr, "error: %s\n", error);
+      fprintf (stderr, "Failed to verify module: %s\n", error);
       LLVMDisposeMessage (error);
-      exit (EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
+  return (EXIT_SUCCESS);
+}
+
+int llvm_destroy (LLVMModuleRef* module, LLVMBuilderRef* builder)
+{
+  LLVMDisposeBuilder(*builder);
+  LLVMDisposeModule (*module);
+  return (EXIT_SUCCESS);
 }

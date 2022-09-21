@@ -51,18 +51,23 @@ expr:
 | '-' expr %prec UMINUS 
   { 
     extra_t* extra = calc_get_extra (scanner);
-    $$ = ast_alloc_node (extra->arena, '|', $2, -1); 
+    $$ = ast_alloc_node (extra->arena, 'M', $2, -1); 
   }
 | '|' expr %prec UMINUS 
   { 
     extra_t* extra = calc_get_extra (scanner);
-    $$ = ast_alloc_node (extra->arena, 'M', $2, -1); 
+    $$ = ast_alloc_node (extra->arena, '|', $2, -1); 
   }
 | '(' expr ')' { $$ = $2; }
 | NUMBER 
   { 
     extra_t* extra = calc_get_extra (scanner);
     $$ = ast_alloc_num (extra->arena, $1); 
+  }
+| 'x'
+  {
+    extra_t* extra = calc_get_extra (scanner);
+    $$ = ast_alloc_x (extra->arena);
   }
 
 %%

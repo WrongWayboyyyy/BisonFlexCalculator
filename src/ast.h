@@ -1,17 +1,16 @@
 #ifndef _AST_H_
 #define _AST_H_
 
-
 #include "tree.h"
+#include "value.h"
 
-typedef struct extra_t 
-{
+typedef struct ast_extra_t {
   arena_t* arena;
-  double* result;
+  value_type_t x_value;
 } extra_t;
 
-#define AST_STYPE long double
+#define AST_STYPE value_type_t
 #define YYSTYPE AST_STYPE
 #define ast_lex calc_lex
 
-#endif /* _AST_H */
+#endif /* _AST_H_ */

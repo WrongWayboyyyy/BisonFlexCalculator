@@ -1,3 +1,4 @@
+from cgi import test
 import subprocess as sb
 import time
 import sys
@@ -17,13 +18,16 @@ def main():
     ver = sys.argv[6]
 
     for expr_len in range(1, right_bound, step):
-        test_string = "+".join(['2'] * expr_len)
-        args = [exe_path, ver, iter, test_string]
+        test_string = "x";
+        for i in range(1, expr_len):
+            test_string += f"*(x+{i})";
+        args = [exe_path, ver, "-r " + iter, test_string]
+        print(args)
         t = time.monotonic()
         run(args)
         end_t = time.monotonic()
         f = open(out_path, "a")
-        f.write(f"{expr_len} {(end_t - t) / (int(iter[3:]))}\n")
+        f.write(f"{expr_len} {(end_t - t) / (int(iter))}\n")
         f.close()
         print(f" Step {expr_len} finished")
         

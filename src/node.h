@@ -17,10 +17,4 @@ typedef struct node_t
   int nodetype;
 } node_t;
 
-typedef struct value_t 
-{
-  int nodetype;
-  double number;
-} value_t;
-
 #endif /* _NODE_H_ */

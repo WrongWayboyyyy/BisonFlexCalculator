@@ -22,8 +22,8 @@ static void parser_error (void* scanner, char* error) {}
 
 result: expr 
 {
-  PARSER_STYPE* result = calc_get_extra (scanner);
-  *result = $1;
+  extra_t* extra = calc_get_extra (scanner);
+  extra->result = $$;
 }
 
 expr:
@@ -32,9 +32,12 @@ expr:
 | expr '*' expr { $$ = $1 * $3; }
 | expr '/' expr { $$ = $1 / $3; }
 | '-' expr %prec UMINUS { $$ = -$2; }
-| '+' expr %prec UMINUS { $$ = $2; }
 | '(' expr ')' { $$ = $2; }
 | NUMBER { $$ = $1; }
-
+| 'x'
+  {
+      extra_t* extra = calc_get_extra (scanner);           \
+      $$ = extra->x_value;
+  }
 
 %%
